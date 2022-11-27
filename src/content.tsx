@@ -4,7 +4,7 @@ import { createRoot }  from "react-dom/client"
 function Message () {
 	return (
 		<div>
-			<h1>Hello world 6</h1>
+			<h1>Hello world</h1>
 			<p>This is a simple popup.</p>
 		</div>
 	)
