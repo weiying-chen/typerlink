@@ -1,12 +1,18 @@
 import React from "react"
+import { useState } from 'react';
 import { createRoot }  from "react-dom/client"
 
 function Message () {
+	const [count, setCount] = useState(0)
+
+	function handleClick() {
+		setCount(count + 1)
+	}
+
 	return (
-		<div>
-			<h1>Hello world</h1>
-			<p>This is a simple popup.</p>
-		</div>
+		<button onClick={handleClick}>
+      		Clicked {count} times
+    	</button>
 	)
 }
 
