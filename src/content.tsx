@@ -3,7 +3,7 @@ import { useState, useEffect, useSyncExternalStore } from 'react';
 import { createRoot }  from "react-dom/client"
 
 function isAlphanumeric (key: any) {
-  return !(/Control|Shift|Alt|\[|\]/.test(key))
+  return !(/Control|Shift|Alt|Meta|\[|\]/.test(key))
 }
 
 let keys: string[] = []
