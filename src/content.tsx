@@ -2,6 +2,9 @@ import React from "react"
 import { useState, useEffect, useSyncExternalStore } from 'react';
 import { createRoot }  from "react-dom/client"
 
+function isAlphanumeric (key: any) {
+  return !(/Control|Shift|Alt|\[|\]/.test(key))
+}
 
 let keys: string[] = []
 let elements: any[] = []
@@ -9,7 +12,7 @@ let elements: any[] = []
 let currentElement: HTMLElement = document.createElement('div')
 let selectedElement: HTMLElement = document.createElement('div')
 
-document.addEventListener('keypress', event => {
+document.addEventListener('keydown', event => {
   // TODO: see if can refractor this
   if (event.key === ' ') return
   if (!(event.target instanceof HTMLElement)) return // EventTarget is not guarantied to be an HTMLElement
@@ -45,11 +48,11 @@ document.addEventListener('keypress', event => {
   }
 
   // TODO: fix this with if else
-  if (event.key !== ']' && event.key !== '[' && event.key !== 'Enter') {
+  if (isAlphanumeric(event.key)) {
     keys.push(event.key)
   }
 
-  console.log(keys)
+  console.log('keys', keys)
 
   // Reset elements
 
@@ -135,18 +138,20 @@ function App () {
 	let [keysState, setKeysState] = useState<string[]>([])
 
   useEffect(() => {
-    function handleKeypress () {
-      setKeysState([...keys])
+    function handleKeypress (event: any) {
+      if (isAlphanumeric(event.key)) {
+        setKeysState([...keys])
+      }
     }
 
-    console.log('Worked')
-
-    document.addEventListener("keypress", handleKeypress)
+    document.addEventListener("keydown", handleKeypress)
 
     return () => {
-      document.removeEventListener("keypress", handleKeypress)
+      document.removeEventListener("keydown", handleKeypress)
     }
   }, [])
+
+  console.log('keysSate', keysState)
 
 	return (
 		<div>
