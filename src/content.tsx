@@ -131,7 +131,7 @@ interface Keys {
 	keys: string[]
 }
 
-function Message () {
+function App () {
 	let [keysState, setKeysState] = useState<string[]>([])
 
   useEffect(() => {
@@ -139,9 +139,9 @@ function Message () {
       setKeysState([...keys])
     }
 
-    document.addEventListener("keypress", handleKeypress)
+    console.log('Worked')
 
-    // handleKeypress()
+    document.addEventListener("keypress", handleKeypress)
 
     return () => {
       document.removeEventListener("keypress", handleKeypress)
@@ -162,4 +162,4 @@ document.body.appendChild(rootElement)
 
 const root = createRoot(rootElement)
 
-root.render(<Message />)
+root.render(<App />)
