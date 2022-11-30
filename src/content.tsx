@@ -3,7 +3,7 @@ import { useState, useEffect, useSyncExternalStore } from 'react';
 import { createRoot }  from "react-dom/client"
 
 function isAlphanumeric (key: any) {
-  return !(/Control|Shift|Alt|Meta|\[|\]/.test(key))
+  return !(/Control|Shift|Alt|Meta|Enter|\[|\]/.test(key))
 }
 
 let keys: string[] = []
@@ -76,8 +76,7 @@ document.addEventListener('keydown', event => {
   })
 
   elements = elements.map(element => {
-    const replacement = '<span class="highlighted">$&</span>'
-    element.innerHTML = element.innerHTML.replace(text, replacement)
+    element.innerHTML = element.innerHTML.replace(text, '<span class="highlighted">$&</span>')
     return element
   })
 
@@ -90,7 +89,7 @@ document.addEventListener('keydown', event => {
     : elements[0]
 
   if (currentElement) {
-    currentElement.style.borderBottom = '2px solid orange'
+    currentElement.querySelector('span')?.classList.add('selected')
 
     currentElement.scrollIntoView({
       block: "center",
@@ -119,20 +118,16 @@ document.addEventListener('keydown', event => {
 
   function removeHighlight (elements: any) {
     return elements.map((element: any) => {
-      element.innerHTML = element.innerHTML.replace(/<span class="highlighted">|<\/span>/, '')
+      element.innerHTML = element.innerHTML.replace(/<\/?span[^>]*>/, '')
       return element
     })
   }
 
-  function removeBorder (currentElement: any) {
-    currentElement.style.borderBottom = 'none'
-	return currentElement
+  function removeBorder (currentElement: HTMLElement) {
+    currentElement.querySelector('span')?.classList.remove('selected')
+    return currentElement
   }
 })
-
-interface Keys {
-	keys: string[]
-}
 
 function App () {
 	let [keysState, setKeysState] = useState<string[]>([])

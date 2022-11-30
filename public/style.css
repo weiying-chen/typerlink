@@ -9,3 +9,7 @@
 .highlighted {
 	background: #f6d860;
 }
+
+.selected {
+	background: #95cd41;
+}
