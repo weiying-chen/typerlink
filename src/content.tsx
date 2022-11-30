@@ -76,20 +76,20 @@ document.addEventListener('keydown', event => {
   })
 
   elements = elements.map(element => {
-    const replacement = '<strong>$&</strong>'
+    const replacement = '<span class="highlighted">$&</span>'
     element.innerHTML = element.innerHTML.replace(text, replacement)
     return element
   })
+
+  if (currentElement) {
+    currentElement = removeBorder(currentElement)
+  }
 
   currentElement = selectedElement.innerHTML
     ? selectedElement
     : elements[0]
 
   if (currentElement) {
-    if (currentElement.style) {
-      currentElement = removeBorder(currentElement)
-    }
-
     currentElement.style.borderBottom = '2px solid orange'
 
     currentElement.scrollIntoView({
@@ -119,7 +119,7 @@ document.addEventListener('keydown', event => {
 
   function removeHighlight (elements: any) {
     return elements.map((element: any) => {
-      element.innerHTML = element.innerHTML.replace(/<strong>|<\/strong>/, '')
+      element.innerHTML = element.innerHTML.replace(/<span class="highlighted">|<\/span>/, '')
       return element
     })
   }
