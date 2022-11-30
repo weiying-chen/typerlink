@@ -54,11 +54,8 @@ document.addEventListener('keydown', event => {
 
   console.log('keys', keys)
 
-  // Reset elements
-
+  // Since the text will have a `span` tag, searching for text will be affected
   elements = removeHighlight(elements)
-
-  // Get elements
 
   let text = keys.join('')
   const regExp = new RegExp (`\\b${text}`)
