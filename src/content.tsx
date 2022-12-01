@@ -3,8 +3,8 @@ import { useState, useEffect, useSyncExternalStore } from 'react';
 import { createRoot }  from "react-dom/client"
 
 function isAlphanumeric (key: string) {
-  // return !(/Control|Shift|Alt|Meta|Enter|\[|\]/.test(key))
-  return key.length === 1
+  // TODO: add more modifier keys
+  return !(/Control|Shift|Alt|Meta/.test(key))
 }
 
 let keys: string[] = []
@@ -50,7 +50,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     selectedElement = previousElement
   }
 
-  if (!(/\[|\]/.test(event.key))) {
+  if (!(/\[|\]|Enter/.test(event.key))) {
     keys.push(event.key)
   }
 
@@ -106,14 +106,14 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     elements[0].click()
     keys = []
     currentElement = document.createElement('div')
-    elements = removeHighlight(elements) // In case there's a popup
+    elements = removeHighlight(elements)
     return
   }
 
   if (event.key === 'Enter') {
     currentElement.click()
     keys = []
-    elements = removeHighlight(elements) // In case there's a popup
+    elements = removeHighlight(elements)
   }
 
   function removeHighlight (elements: any) {
