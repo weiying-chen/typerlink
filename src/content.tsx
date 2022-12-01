@@ -2,8 +2,9 @@ import React from "react"
 import { useState, useEffect, useSyncExternalStore } from 'react';
 import { createRoot }  from "react-dom/client"
 
-function isAlphanumeric (key: any) {
-  return !(/Control|Shift|Alt|Meta|Enter|\[|\]/.test(key))
+function isAlphanumeric (key: string) {
+  // return !(/Control|Shift|Alt|Meta|Enter|\[|\]/.test(key))
+  return key.length === 1
 }
 
 let keys: string[] = []
@@ -12,13 +13,15 @@ let elements: any[] = []
 let currentElement: HTMLElement = document.createElement('div')
 let selectedElement: HTMLElement = document.createElement('div')
 
-document.addEventListener('keydown', event => {
+document.addEventListener('keydown', (event: KeyboardEvent) => {
   // TODO: see if can refractor this
-  if (event.key === ' ') return
-  if (!(event.target instanceof HTMLElement)) return // EventTarget is not guarantied to be an HTMLElement
-  if (event.target.nodeName === 'INPUT' ||
-    event.target.nodeName === 'TEXTAREA' ||
-    event.target.isContentEditable) {
+  if (!isAlphanumeric(event.key)) return
+
+  const target = event.target as HTMLElement
+
+  if (target.nodeName === 'INPUT' ||
+    target.nodeName === 'TEXTAREA' ||
+    target.isContentEditable) {
     keys = []
     return
   }
@@ -47,8 +50,7 @@ document.addEventListener('keydown', event => {
     selectedElement = previousElement
   }
 
-  // TODO: fix this with if else
-  if (isAlphanumeric(event.key)) {
+  if (!(/\[|\]/.test(event.key))) {
     keys.push(event.key)
   }
 
@@ -61,6 +63,7 @@ document.addEventListener('keydown', event => {
   const regExp = new RegExp (`\\b${text}`)
   const selectors = 'a, h3, button'
 
+  // TODO: Remove contidional statement nesting
   elements = [...document.querySelectorAll(selectors)].filter(element => {
     if (element.childNodes) {
 	  let nodeWithText = [...element.childNodes].find(childNode => childNode.nodeType == Node.TEXT_NODE)
@@ -131,9 +134,7 @@ function App () {
 
   useEffect(() => {
     function handleKeypress (event: any) {
-      if (isAlphanumeric(event.key)) {
-        setKeysState([...keys])
-      }
+      setKeysState([...keys])
     }
 
     document.addEventListener("keydown", handleKeypress)
@@ -142,8 +143,6 @@ function App () {
       document.removeEventListener("keydown", handleKeypress)
     }
   }, [])
-
-  console.log('keysSate', keysState)
 
 	return (
 		<div>
