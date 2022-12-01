@@ -57,7 +57,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
   console.log('keys', keys)
 
-  // Since the text will have a `span` tag, searching for text will be affected
+  // Since the text will have an HTML tag, searching for text will be affected
   elements = removeHighlight(elements)
 
   let text = keys.join('')
@@ -77,7 +77,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   })
 
   elements = elements.map(element => {
-    element.innerHTML = element.innerHTML.replace(text, '<span class="highlighted">$&</span>')
+    element.innerHTML = element.innerHTML.replace(text, '<mark class="highlighted">$&</mark>')
     return element
   })
 
@@ -90,7 +90,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     : elements[0]
 
   if (currentElement) {
-    currentElement.querySelector('span')?.classList.add('selected')
+    currentElement.querySelector('mark')?.classList.add('selected')
 
     currentElement.scrollIntoView({
       block: "center",
@@ -124,13 +124,13 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
   function removeHighlight (elements: any) {
     return elements.map((element: any) => {
-      element.innerHTML = element.innerHTML.replace(/<\/?span[^>]*>/, '')
+      element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
       return element
     })
   }
 
   function removeBorder (currentElement: HTMLElement) {
-    currentElement.querySelector('span')?.classList.remove('selected')
+    currentElement.querySelector('mark')?.classList.remove('selected')
     return currentElement
   }
 })
