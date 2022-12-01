@@ -50,7 +50,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     selectedElement = previousElement
   }
 
-  if (!(/\[|\]|Enter/.test(event.key))) {
+  // TODO: see if there's a more efficent conditional statement
+  if (!(/\[|\]|Enter|Escape/.test(event.key))) {
     keys.push(event.key)
   }
 
@@ -112,6 +113,11 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
   if (event.key === 'Enter') {
     currentElement.click()
+    keys = []
+    elements = removeHighlight(elements)
+  }
+
+  if (event.key === 'Escape') {
     keys = []
     elements = removeHighlight(elements)
   }
