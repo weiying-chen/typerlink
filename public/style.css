@@ -1,3 +1,5 @@
+/* Color theme: https://colorhunt.co/palette/ff6b6bffd93d6bcb774d96ff */
+
 #app-wrapper {
 	position: fixed;
 	bottom: 0;
@@ -7,9 +9,11 @@
 }
 
 .highlighted {
-	background: #f6d860;
+	color: #111;
+	background: #ffd93d;
 }
 
 .selected {
-	background: #95cd41;
+	color: #111;
+	background: #6bcb77;
 }
