@@ -139,7 +139,7 @@ function App () {
 	let [keysState, setKeysState] = useState<string[]>([])
 
   useEffect(() => {
-    function handleKeypress (event: any) {
+    function handleKeypress () {
       setKeysState([...keys])
     }
 
@@ -150,11 +150,11 @@ function App () {
     }
   }, [])
 
-	return (
-		<div>
-			{keysState.map((key: string) => <li>{key}</li>)}
-		</div>
-	)
+  if (keysState.length) {
+		return <div id="keys">{keysState.map((key: string) => key)}</div>
+  } else {
+    return null
+  }
 }
 
 const rootElement = document.createElement("div")

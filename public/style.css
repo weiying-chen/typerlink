@@ -2,10 +2,17 @@
 
 #app-wrapper {
 	position: fixed;
-	bottom: 0;
+	bottom: 10px;
 	left: 50%;
 	transform: translateX(-50%);
 	z-index: 9999;
+}
+
+#keys {
+	background: rgba(0, 0, 0, 0.5);
+	color: #eee;
+	font-size: 14px;
+	padding: 5px;
 }
 
 .highlighted {
