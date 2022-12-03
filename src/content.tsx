@@ -1,10 +1,13 @@
 import React from "react"
-import { useState, useEffect, useSyncExternalStore } from 'react';
+import { useState, useEffect } from 'react'
 import { createRoot }  from "react-dom/client"
 
-function isAlphanumeric (key: string) {
-  // TODO: add more modifier keys
-  return !(/Control|Shift|Alt|Meta/.test(key))
+// function isAlphanumeric (key: string) {
+//   return !(/Shift/.test(key))
+// }
+
+function isModifier (event: KeyboardEvent) {
+ return event.ctrlKey || event.altKey || event.metaKey
 }
 
 let keys: string[] = []
@@ -14,8 +17,9 @@ let currentElement: HTMLElement = document.createElement('div')
 let selectedElement: HTMLElement = document.createElement('div')
 
 document.addEventListener('keydown', (event: KeyboardEvent) => {
-  // TODO: see if can refractor this
-  if (!isAlphanumeric(event.key)) return
+  if (isModifier(event)) return
+  if (event.key === 'Shift') return
+  // if (!isAlphanumeric(event.key)) return
 
   const target = event.target as HTMLElement
 
