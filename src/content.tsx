@@ -127,7 +127,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   }
 
   if (event.key === 'Backspace') {
-    keys = removeLastKey(keys)
+    keys = removeLast(keys)
   }
 
   function removeHighlight (elements: any) {
@@ -142,10 +142,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     return currentElement
   }
 
-  function removeLastKey (keys: string[]) {
-    return keys.filter((key, index, array) => {
+  function removeLast (array: string[]) {
+    return array.filter((item, index, array) => {
       if (index !== array.length - 1) {
-        return key
+        return item
       }
     })
   }
