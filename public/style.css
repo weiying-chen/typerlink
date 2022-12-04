@@ -9,7 +9,7 @@
 }
 
 #keys {
-	background: #041122;
+	background: #312f44;
 	display: flex;
 	align-items: center;
 	color: #fff;
@@ -18,16 +18,26 @@
 }
 
 #caret {
-	color: #259073;
+	color: #4c74c9;
 	font-size: 18px;
 }
 
 .highlighted {
 	color: #111;
-	background: #e6f99d;
+	background: #f5ff8d;
 }
 
 .selected {
 	color: #111;
-	background: #7fda89;
+	background: #50cb86;
 }
+
+#
+#
+#
+#
+
+#F5FF8D
+#50CB86
+#4C74C9
+#312F44
