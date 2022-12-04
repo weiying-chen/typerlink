@@ -55,7 +55,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   }
 
   // TODO: see if there's a more efficient conditional statement
-  if (!(/\[|\]|Enter|Escape/.test(event.key))) {
+  if (!(/\[|\]|Enter|Escape|Backspace/.test(event.key))) {
     keys.push(event.key)
   }
 
@@ -102,10 +102,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     })
   }
 
-  if (elements.length === 0) {
-    keys = []
-    return
-  }
+  // if (elements.length === 0) {
+  //   keys = []
+  //   return
+  // }
 
   if (elements.length === 1) {
     elements[0].click()
@@ -126,6 +126,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     elements = removeHighlight(elements)
   }
 
+  if (event.key === 'Backspace') {
+    keys = removeLastKey(keys)
+  }
+
   function removeHighlight (elements: any) {
     return elements.map((element: any) => {
       element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
@@ -136,6 +140,14 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   function removeBorder (currentElement: HTMLElement) {
     currentElement.querySelector('mark')?.classList.remove('selected')
     return currentElement
+  }
+
+  function removeLastKey (keys: string[]) {
+    return keys.filter((key, index, array) => {
+      if (index !== array.length - 1) {
+        return key
+      }
+    })
   }
 })
 
