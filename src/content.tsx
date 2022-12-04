@@ -7,7 +7,7 @@ import { createRoot }  from "react-dom/client"
 // }
 
 function isModifier (event: KeyboardEvent) {
- return event.ctrlKey || event.altKey || event.metaKey
+  return event.ctrlKey || event.altKey || event.metaKey
 }
 
 let keys: string[] = []
@@ -29,6 +29,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     keys = []
     return
   }
+
+  // If some of these conditional statements are put down below, they might not affect `elements`.
 
   if (event.key === ']') {
     const nextElement = elements.reduce((result, element, index, array) => {
@@ -52,6 +54,19 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     }, {})
 
     selectedElement = previousElement
+  }
+
+  // If `return` is added `elements` won't be set correctly below.
+
+  if (event.key === 'Enter') {
+    currentElement.click()
+    keys = []
+    elements = removeHighlight(elements)
+  }
+
+  if (event.key === 'Escape') {
+    keys = []
+    elements = removeHighlight(elements)
   }
 
   if (event.key === 'Backspace') {
@@ -117,17 +132,6 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     currentElement = document.createElement('div')
     elements = removeHighlight(elements)
     return
-  }
-
-  if (event.key === 'Enter') {
-    currentElement.click()
-    keys = []
-    elements = removeHighlight(elements)
-  }
-
-  if (event.key === 'Escape') {
-    keys = []
-    elements = removeHighlight(elements)
   }
 
   function removeHighlight (elements: any) {
