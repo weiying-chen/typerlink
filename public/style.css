@@ -9,14 +9,12 @@
 }
 
 #keys {
-	background: #fff;
-	border: 1px solid #888;
-	border-radius: 4px;
+	background: rgb(0, 0, 0, 0.6);
 	display: flex;
 	align-items: center;
-	color: #111;
+	color: #fff;
 	font-size: 14px;
-	padding: 10px;
+	padding: 5px;
 }
 
 #caret {
