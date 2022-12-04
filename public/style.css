@@ -1,4 +1,4 @@
-/* Color theme: https://colorhunt.co/palette/ff6b6bffd93d6bcb774d96ff */
+/* Color theme: https://colorhunt.co/palette/0411222590737fda89e6f99d */
 
 #app-wrapper {
 	position: fixed;
@@ -9,7 +9,7 @@
 }
 
 #keys {
-	background: rgb(0, 0, 0, 0.6);
+	background: #041122;
 	display: flex;
 	align-items: center;
 	color: #fff;
@@ -18,15 +18,16 @@
 }
 
 #caret {
+	color: #259073;
 	font-size: 18px;
 }
 
 .highlighted {
 	color: #111;
-	background: #ffd93d;
+	background: #e6f99d;
 }
 
 .selected {
 	color: #111;
-	background: #6bcb77;
+	background: #7fda89;
 }
