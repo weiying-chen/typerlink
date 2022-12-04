@@ -54,7 +54,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     selectedElement = previousElement
   }
 
-  // TODO: see if there's a more efficent conditional statement
+  // TODO: see if there's a more efficient conditional statement
   if (!(/\[|\]|Enter|Escape/.test(event.key))) {
     keys.push(event.key)
   }
@@ -68,7 +68,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   const regExp = new RegExp (`\\b${text}`)
   const selectors = 'a, h3, button'
 
-  // TODO: Remove contidional statement nesting
+  // TODO: Remove conditional statement nesting
   elements = [...document.querySelectorAll(selectors)].filter(element => {
     if (element.childNodes) {
 	  let nodeWithText = [...element.childNodes].find(childNode => childNode.nodeType == Node.TEXT_NODE)
@@ -161,7 +161,7 @@ function App () {
   }
 }
 
-const rootElement = document.createElement("div")
+const rootElement = document.createElement('div')
 
 rootElement.setAttribute('id', 'app-wrapper')
 document.body.appendChild(rootElement)

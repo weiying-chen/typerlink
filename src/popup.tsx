@@ -10,5 +10,8 @@ function Popup () {
 	)
 }
 
-const root = createRoot(document.getElementById("react-target")!)
+// The ! assures React the element exists
+const rootElement = document.getElementById("react-target")!
+const root = createRoot(rootElement)
+
 root.render(<Popup />)
