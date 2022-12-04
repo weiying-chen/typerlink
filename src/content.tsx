@@ -54,6 +54,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     selectedElement = previousElement
   }
 
+  if (event.key === 'Backspace') {
+    keys = removeLast(keys)
+  }
+
   // TODO: see if there's a more efficient conditional statement
   if (!(/\[|\]|Enter|Escape|Backspace/.test(event.key))) {
     keys.push(event.key)
@@ -124,10 +128,6 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   if (event.key === 'Escape') {
     keys = []
     elements = removeHighlight(elements)
-  }
-
-  if (event.key === 'Backspace') {
-    keys = removeLast(keys)
   }
 
   function removeHighlight (elements: any) {
