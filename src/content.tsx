@@ -171,7 +171,12 @@ function App () {
   }, [])
 
   if (keysState.length) {
-		return <div id="keys">{keysState.map((key: string) => key)}</div>
+		return (
+      <div id="keys">
+        <span>{keysState.map((key: string) => key)}</span>
+        <span id="caret">|</span>
+      </div>
+    )
   } else {
     return null
   }

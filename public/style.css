@@ -9,10 +9,16 @@
 }
 
 #keys {
-	background: rgba(0, 0, 0, 0.5);
-	color: #eee;
+	background: rgba(255,255, 255, 0.8);
+	display: flex;
+	align-items: center;
+	color: #111;
 	font-size: 14px;
 	padding: 5px;
+}
+
+#caret {
+	font-size: 18px;
 }
 
 .highlighted {
