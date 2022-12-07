@@ -60,12 +60,14 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
   if (event.key === 'Enter') {
     currentElement.click()
+    currentElement = document.createElement('div')
     keys = []
     elements = removeHighlight(elements)
   }
 
   if (event.key === 'Escape') {
     keys = []
+    currentElement = document.createElement('div')
     elements = removeHighlight(elements)
   }
 
@@ -122,8 +124,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   }
 
   // if (elements.length === 0) {
-  //   keys = []
-  //   return
+  //   currentElement = document.createElement('div')
   // }
 
   if (elements.length === 1) {
@@ -175,6 +176,7 @@ function App () {
       <div id="keys">
         <span>{keysState.map((key: string) => key)}</span>
         <span id="caret">|</span>
+        <span id="matches">{elements.indexOf(currentElement) + 1}/{elements.length}</span>
       </div>
     )
   } else {

@@ -24,6 +24,11 @@
 	font-size: 18px;
 }
 
+#keys #matches {
+	color: #888;
+	margin-left: 2px;
+}
+
 .highlighted {
 	color: #111;
 	background: #f5ff8d;
