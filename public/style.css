@@ -12,13 +12,15 @@
 	background: #312f44;
 	display: flex;
 	align-items: center;
-	color: #fff;
-	font-size: 14px;
 	padding: 5px;
 }
 
-#caret {
-	color: #4c74c9;
+#keys span {
+	color: #fff;
+	font-size: 14px;
+}
+
+#keys #caret {
 	font-size: 18px;
 }
 
