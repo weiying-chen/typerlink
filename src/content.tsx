@@ -83,7 +83,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	}
 
 	// TODO: see if there's a more efficient conditional statement
-	if (!/\[|\]|Enter|Escape|Backspace/.test(event.key)) {
+	if (!/\[|\]|Enter|Escape|Backspace|ArrowLeft|ArrowRight|F5/.test(event.key)) {
 		keys.push(event.key)
 	}
 
