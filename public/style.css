@@ -20,12 +20,16 @@
 	font-size: 14px;
 }
 
+#keys #matches {
+	white-space: pre-wrap;
+}
+
 #keys #caret {
 	font-size: 18px;
 	animation: cursor-blink 1.4s steps(2) infinite;
 }
 
-#keys #matches {
+#keys #count {
 	color: #888;
 	margin-left: 4px;
 }

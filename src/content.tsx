@@ -174,9 +174,9 @@ function App () {
   if (keysState.length) {
 		return (
       <div id="keys">
-        <span>{keysState.map((key: string) => key)}</span>
+        <span id="matches">{keysState.map((key: string) => key)}</span>
         <span id="caret">|</span>
-        <span id="matches">{elements.indexOf(currentElement) + 1}/{elements.length}</span>
+        <span id="count">{elements.indexOf(currentElement) + 1}/{elements.length}</span>
       </div>
     )
   } else {
