@@ -6,7 +6,7 @@ import { createRoot }  from "react-dom/client"
 //   return !(/Shift/.test(key))
 // }
 
-function isModifier (event: KeyboardEvent) {
+function isModifier(event: KeyboardEvent) {
   return event.ctrlKey || event.altKey || event.metaKey
 }
 
@@ -135,19 +135,19 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
     return
   }
 
-  function removeHighlight (elements: any) {
+  function removeHighlight(elements: any) {
     return elements.map((element: any) => {
       element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
       return element
     })
   }
 
-  function removeBorder (currentElement: HTMLElement) {
+  function removeBorder(currentElement: HTMLElement) {
     currentElement.querySelector('mark')?.classList.remove('selected')
     return currentElement
   }
 
-  function removeLast (array: string[]) {
+  function removeLast(array: string[]) {
     return array.filter((item, index, array) => {
       if (index !== array.length - 1) {
         return item
@@ -156,11 +156,11 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
   }
 })
 
-function App () {
+function App() {
 	let [keysState, setKeysState] = useState<string[]>([])
 
   useEffect(() => {
-    function handleKeypress () {
+    function handleKeypress() {
       setKeysState([...keys])
     }
 

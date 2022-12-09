@@ -1,7 +1,7 @@
 import React from "react"
 import { createRoot }  from "react-dom/client"
 
-function Popup () {
+function Popup() {
 	return (
 		<div>
 			<h1>Hello world 8</h1>
