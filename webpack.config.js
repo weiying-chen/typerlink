@@ -13,11 +13,13 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist')
 	},
 	module: {
-		rules: [{
-			test: /\.ts(x)?$/,
-			use: 'ts-loader',
-			exclude: /node_modules/
-		}]
+		rules: [
+			{
+				test: /\.ts(x)?$/,
+				use: 'ts-loader',
+				exclude: /node_modules/
+			}
+		]
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
