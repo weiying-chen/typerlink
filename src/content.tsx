@@ -1,6 +1,6 @@
-import React from "react"
-import { useState, useEffect } from "react"
-import { createRoot } from "react-dom/client"
+import React from 'react'
+import { useState, useEffect } from 'react'
+import { createRoot } from 'react-dom/client'
 
 // function isAlphanumeric (key: string) {
 //   return !(/Shift/.test(key))
@@ -13,19 +13,19 @@ function isModifier(event: KeyboardEvent) {
 let keys: string[] = []
 let elements: any[] = []
 // TODO: maybe replace creating div with something less hacky
-let currentElement: HTMLElement = document.createElement("div")
-let selectedElement: HTMLElement = document.createElement("div")
+let currentElement: HTMLElement = document.createElement('div')
+let selectedElement: HTMLElement = document.createElement('div')
 
-document.addEventListener("keydown", (event: KeyboardEvent) => {
+document.addEventListener('keydown', (event: KeyboardEvent) => {
 	if (isModifier(event)) return
-	if (event.key === "Shift") return
+	if (event.key === 'Shift') return
 	// if (!isAlphanumeric(event.key)) return
 
 	const target = event.target as HTMLElement
 
 	if (
-		target.nodeName === "INPUT" ||
-		target.nodeName === "TEXTAREA" ||
+		target.nodeName === 'INPUT' ||
+		target.nodeName === 'TEXTAREA' ||
 		target.isContentEditable
 	) {
 		keys = []
@@ -34,7 +34,7 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
 
 	// If some of these conditional statements are put down below, they might not affect `elements`.
 
-	if (event.key === "]") {
+	if (event.key === ']') {
 		const nextElement = elements.reduce((result, element, index, array) => {
 			if (element === currentElement) {
 				result =
@@ -47,7 +47,7 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
 		selectedElement = nextElement
 	}
 
-	if (event.key === "[") {
+	if (event.key === '[') {
 		const previousElement = elements.reduce(
 			(result, element, index, array) => {
 				if (element === currentElement) {
@@ -65,20 +65,20 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
 
 	// If `return` is added `elements` won't be set correctly below.
 
-	if (event.key === "Enter") {
+	if (event.key === 'Enter') {
 		currentElement.click()
-		currentElement = document.createElement("div")
+		currentElement = document.createElement('div')
 		keys = []
 		elements = removeHighlight(elements)
 	}
 
-	if (event.key === "Escape") {
+	if (event.key === 'Escape') {
 		keys = []
-		currentElement = document.createElement("div")
+		currentElement = document.createElement('div')
 		elements = removeHighlight(elements)
 	}
 
-	if (event.key === "Backspace") {
+	if (event.key === 'Backspace') {
 		keys = removeLast(keys)
 	}
 
@@ -87,14 +87,14 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
 		keys.push(event.key)
 	}
 
-	console.log("keys", keys)
+	console.log('keys', keys)
 
 	// Since the text will have an HTML tag, searching for text will be affected
 	elements = removeHighlight(elements)
 
-	let text = keys.join("")
+	let text = keys.join('')
 	const regExp = new RegExp(`\\b${text}`)
-	const selectors = "a, h3, button"
+	const selectors = 'a, h3, button'
 
 	// TODO: Remove conditional statement nesting
 	elements = [...document.querySelectorAll(selectors)].filter((element) => {
@@ -125,11 +125,11 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
 	currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
 
 	if (currentElement) {
-		currentElement.querySelector("mark")?.classList.add("selected")
+		currentElement.querySelector('mark')?.classList.add('selected')
 
 		currentElement.scrollIntoView({
-			block: "center",
-			behavior: "auto",
+			block: 'center',
+			behavior: 'auto',
 		})
 	}
 
@@ -140,20 +140,20 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
 	if (elements.length === 1) {
 		elements[0].click()
 		keys = []
-		currentElement = document.createElement("div")
+		currentElement = document.createElement('div')
 		elements = removeHighlight(elements)
 		return
 	}
 
 	function removeHighlight(elements: any) {
 		return elements.map((element: any) => {
-			element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, "")
+			element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
 			return element
 		})
 	}
 
 	function removeBorder(currentElement: HTMLElement) {
-		currentElement.querySelector("mark")?.classList.remove("selected")
+		currentElement.querySelector('mark')?.classList.remove('selected')
 		return currentElement
 	}
 
@@ -174,10 +174,10 @@ function App() {
 			setKeysState([...keys])
 		}
 
-		document.addEventListener("keydown", handleKeypress)
+		document.addEventListener('keydown', handleKeypress)
 
 		return () => {
-			document.removeEventListener("keydown", handleKeypress)
+			document.removeEventListener('keydown', handleKeypress)
 		}
 	}, [])
 
@@ -196,9 +196,9 @@ function App() {
 	}
 }
 
-const rootElement = document.createElement("div")
+const rootElement = document.createElement('div')
 
-rootElement.setAttribute("id", "app-wrapper")
+rootElement.setAttribute('id', 'app-wrapper')
 document.body.appendChild(rootElement)
 
 const root = createRoot(rootElement)

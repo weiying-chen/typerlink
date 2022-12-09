@@ -10,27 +10,25 @@ module.exports = {
 	},
 	output: {
 		filename: '[name].js',
-		path: path.resolve(__dirname, 'dist')
+		path: path.resolve(__dirname, 'dist'),
 	},
 	module: {
 		rules: [
 			{
 				test: /\.ts(x)?$/,
 				use: 'ts-loader',
-				exclude: /node_modules/
-			}
-		]
+				exclude: /node_modules/,
+			},
+		],
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			filename: 'popup.html',
 			template: './src/popup.html',
-			chunks: ['popup']
+			chunks: ['popup'],
 		}),
 		new CopyPlugin({
-			patterns: [
-				{ from: "public" }
-			]
-		})
-	]
+			patterns: [{ from: 'public' }],
+		}),
+	],
 }

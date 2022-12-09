@@ -1,5 +1,5 @@
-import React from "react"
-import { createRoot } from "react-dom/client"
+import React from 'react'
+import { createRoot } from 'react-dom/client'
 
 function Popup() {
 	return (
@@ -11,7 +11,7 @@ function Popup() {
 }
 
 // The ! assures React the element exists
-const rootElement = document.getElementById("react-target")!
+const rootElement = document.getElementById('react-target')!
 const root = createRoot(rootElement)
 
 root.render(<Popup />)
