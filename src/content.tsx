@@ -2,10 +2,6 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 
-// function isAlphanumeric (key: string) {
-//   return !(/Shift/.test(key))
-// }
-
 function isModifier(event: KeyboardEvent) {
 	return event.ctrlKey || event.altKey || event.metaKey
 }
@@ -19,7 +15,8 @@ let selectedElement: HTMLElement = document.createElement('div')
 document.addEventListener('keydown', (event: KeyboardEvent) => {
 	if (isModifier(event)) return
 	if (event.key === 'Shift') return
-	// if (!isAlphanumeric(event.key)) return
+	// So it doesn't interfere with Chrome's default space behavior
+	if (event.key === ' ' && !keys.length) return
 
 	const target = event.target as HTMLElement
 
@@ -65,6 +62,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
 	// If `return` is added `elements` won't be set correctly below.
 
+	if (event.key === ' ') {
+		event.preventDefault()
+	}
+
 	if (event.key === 'Enter') {
 		currentElement.click()
 		currentElement = document.createElement('div')
@@ -83,26 +84,32 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	}
 
 	// TODO: see if there's a more efficient conditional statement
-	if (!/\[|\]|Enter|Escape|Backspace|ArrowLeft|ArrowRight|F5/.test(event.key)) {
+	if (/\b[a-z0-9]\b|[ ]/i.test(event.key)) {
 		keys.push(event.key)
 	}
 
-	console.log('keys', keys)
+	// console.log('keys', keys)
 
 	// Since the text will have an HTML tag, searching for text will be affected
 	elements = removeHighlight(elements)
 
 	let text = keys.join('')
 	const regExp = new RegExp(`\\b${text}`)
+	// const regExp = new RegExp(`^${text}\\w*?$`)
 	const selectors = 'a, h3, button'
 
+	console.log(regExp)
+
 	// TODO: Remove conditional statement nesting
+	// TODO: Right now, if `keys` is empty, it matches `/(?:)/`. It should match zero elements.
 	elements = [...document.querySelectorAll(selectors)].filter((element) => {
 		if (element.childNodes) {
 			let nodeWithText = [...element.childNodes].find(
 				(childNode) => childNode.nodeType == Node.TEXT_NODE
 			)
+
 			if (nodeWithText) {
+				console.log(nodeWithText.textContent?.match(regExp))
 				if (nodeWithText.textContent?.match(regExp)) {
 					return element
 				}
@@ -133,8 +140,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		})
 	}
 
-	// if (elements.length === 0) {
-	//   currentElement = document.createElement('div')
+	// if (!keys.length) {
+	// 	elements = []
 	// }
 
 	if (elements.length === 1) {
