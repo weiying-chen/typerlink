@@ -96,11 +96,9 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	elements = removeHighlight(elements)
 
 	let text = keys.join('')
-	// `^$` is needed because // will match all the elements on the page
+	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const regExp = new RegExp(text === '' ? '^$' : text)
 	const tags = 'a, h3, button'
-
-	// TODO: Remove conditional statement nesting
 
 	elements = searchElements(tags, regExp)
 	elements = highlight(elements, regExp)
@@ -135,6 +133,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 })
 
 function searchElements(tags: string, regExp: RegExp) {
+	// TODO: Remove conditional statement nesting
 	return [...document.querySelectorAll(tags)].filter((element) => {
 		if (element.childNodes) {
 			let nodeWithText = [...element.childNodes].find(
