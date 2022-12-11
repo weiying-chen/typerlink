@@ -160,7 +160,7 @@ function highlightText(regExp: RegExp) {
 	})
 }
 
-function removeHighlight(elements: any) {
+function removeHighlight(elements: any[]) {
 	return elements.map((element: any) => {
 		element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
 		return element
