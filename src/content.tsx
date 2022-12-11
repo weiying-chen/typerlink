@@ -103,7 +103,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	// TODO: Remove conditional statement nesting
 
 	elements = searchElements(tags, regExp)
-	elements = highlightText(regExp)
+	elements = highlight(elements, regExp)
 
 	if (currentElement) {
 		currentElement = removeSelected(currentElement)
@@ -131,7 +131,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		return
 	}
 
-	console.log('elements3', elements)
+	console.log('elements4', elements)
 })
 
 function searchElements(tags: string, regExp: RegExp) {
@@ -150,7 +150,7 @@ function searchElements(tags: string, regExp: RegExp) {
 	})
 }
 
-function highlightText(regExp: RegExp) {
+function highlight(elements: any[], regExp: RegExp) {
 	return elements.map((element) => {
 		element.innerHTML = element.innerHTML.replace(
 			regExp,
