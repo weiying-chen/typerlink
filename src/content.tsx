@@ -100,8 +100,6 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	const regExp = new RegExp(text === '' ? '^$' : text)
 	const selectors = 'a, h3, button'
 
-	// console.log(regExp)
-
 	// TODO: Remove conditional statement nesting
 	// TODO: Right now, if `keys` is empty, it matches `/(?:)/`. It should match zero elements.
 	elements = [...document.querySelectorAll(selectors)].filter((element) => {
@@ -141,10 +139,6 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		})
 	}
 
-	// if (!keys.length) {
-	// 	elements = []
-	// }
-
 	if (elements.length === 1) {
 		if (!elements[0]) {
 			alert('elements[0] is undefined')
@@ -156,26 +150,28 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		return
 	}
 
-	function removeHighlight(elements: any) {
-		return elements.map((element: any) => {
-			element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
-			return element
-		})
-	}
-
-	function removeBorder(currentElement: HTMLElement) {
-		currentElement.querySelector('mark')?.classList.remove('selected')
-		return currentElement
-	}
-
-	function removeLast(array: string[]) {
-		return array.filter((item, index, array) => {
-			if (index !== array.length - 1) {
-				return item
-			}
-		})
-	}
+	console.log('elements', elements)
 })
+
+function removeHighlight(elements: any) {
+	return elements.map((element: any) => {
+		element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
+		return element
+	})
+}
+
+function removeBorder(currentElement: HTMLElement) {
+	currentElement.querySelector('mark')?.classList.remove('selected')
+	return currentElement
+}
+
+function removeLast(array: string[]) {
+	return array.filter((item, index, array) => {
+		if (index !== array.length - 1) {
+			return item
+		}
+	})
+}
 
 function App() {
 	let [keysState, setKeysState] = useState<string[]>([])
