@@ -106,7 +106,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	elements = highlightText(regExp)
 
 	if (currentElement) {
-		currentElement = removeBorder(currentElement)
+		currentElement = removeSelected(currentElement)
 	}
 
 	currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
@@ -167,7 +167,7 @@ function removeHighlight(elements: any[]) {
 	})
 }
 
-function removeBorder(currentElement: HTMLElement) {
+function removeSelected(currentElement: HTMLElement) {
 	currentElement.querySelector('mark')?.classList.remove('selected')
 	return currentElement
 }
