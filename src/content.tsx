@@ -67,6 +67,9 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	}
 
 	if (event.key === 'Enter') {
+		if (!currentElement) {
+			alert('currentElement is undefined')
+		}
 		currentElement.click()
 		currentElement = document.createElement('div')
 		keys = []
@@ -146,6 +149,9 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	// }
 
 	if (elements.length === 1) {
+		if (!elements[0]) {
+			alert('elements[0] is undefined')
+		}
 		elements[0].click()
 		keys = []
 		currentElement = document.createElement('div')
