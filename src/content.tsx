@@ -98,23 +98,11 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	let text = keys.join('')
 	// `^$` is needed because // will match all the elements on the page
 	const regExp = new RegExp(text === '' ? '^$' : text)
-	const selectors = 'a, h3, button'
+	const tags = 'a, h3, button'
 
 	// TODO: Remove conditional statement nesting
-	// TODO: Right now, if `keys` is empty, it matches `/(?:)/`. It should match zero elements.
-	elements = [...document.querySelectorAll(selectors)].filter((element) => {
-		if (element.childNodes) {
-			let nodeWithText = [...element.childNodes].find(
-				(childNode) => childNode.nodeType == Node.TEXT_NODE
-			)
 
-			if (nodeWithText) {
-				if (nodeWithText.textContent?.match(regExp)) {
-					return element
-				}
-			}
-		}
-	})
+	elements = filterElements(tags, regExp)
 
 	elements = elements.map((element) => {
 		element.innerHTML = element.innerHTML.replace(
@@ -152,6 +140,22 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
 	console.log('elements', elements)
 })
+
+function filterElements(tags: string, regExp: RegExp) {
+	return [...document.querySelectorAll(tags)].filter((element) => {
+		if (element.childNodes) {
+			let nodeWithText = [...element.childNodes].find(
+				(childNode) => childNode.nodeType == Node.TEXT_NODE
+			)
+
+			if (nodeWithText) {
+				if (nodeWithText.textContent?.match(regExp)) {
+					return element
+				}
+			}
+		}
+	})
+}
 
 function removeHighlight(elements: any) {
 	return elements.map((element: any) => {
