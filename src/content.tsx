@@ -94,11 +94,11 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	elements = removeHighlight(elements)
 
 	let text = keys.join('')
-	const regExp = new RegExp(`\\b${text}`)
-	// const regExp = new RegExp(`^${text}\\w*?$`)
+	// `^$` is needed because // will match all the elements on the page
+	const regExp = new RegExp(text === '' ? '^$' : text)
 	const selectors = 'a, h3, button'
 
-	console.log(regExp)
+	// console.log(regExp)
 
 	// TODO: Remove conditional statement nesting
 	// TODO: Right now, if `keys` is empty, it matches `/(?:)/`. It should match zero elements.
@@ -109,7 +109,6 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 			)
 
 			if (nodeWithText) {
-				console.log(nodeWithText.textContent?.match(regExp))
 				if (nodeWithText.textContent?.match(regExp)) {
 					return element
 				}
@@ -124,6 +123,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		)
 		return element
 	})
+
+	console.log('elements', elements)
 
 	if (currentElement) {
 		currentElement = removeBorder(currentElement)
