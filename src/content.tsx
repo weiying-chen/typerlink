@@ -102,15 +102,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
 	// TODO: Remove conditional statement nesting
 
-	elements = filterElements(tags, regExp)
-
-	elements = elements.map((element) => {
-		element.innerHTML = element.innerHTML.replace(
-			text,
-			'<mark class="highlighted">$&</mark>'
-		)
-		return element
-	})
+	elements = searchElements(tags, regExp)
+	elements = highlightText(regExp)
 
 	if (currentElement) {
 		currentElement = removeBorder(currentElement)
@@ -138,10 +131,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		return
 	}
 
-	console.log('elements', elements)
+	console.log('elements3', elements)
 })
 
-function filterElements(tags: string, regExp: RegExp) {
+function searchElements(tags: string, regExp: RegExp) {
 	return [...document.querySelectorAll(tags)].filter((element) => {
 		if (element.childNodes) {
 			let nodeWithText = [...element.childNodes].find(
@@ -154,6 +147,16 @@ function filterElements(tags: string, regExp: RegExp) {
 				}
 			}
 		}
+	})
+}
+
+function highlightText(regExp: RegExp) {
+	return elements.map((element) => {
+		element.innerHTML = element.innerHTML.replace(
+			regExp,
+			'<mark class="highlighted">$&</mark>'
+		)
+		return element
 	})
 }
 
