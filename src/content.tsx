@@ -86,7 +86,6 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		keys = removeLast(keys)
 	}
 
-	// TODO: see if there's a more efficient conditional statement
 	if (/\b[a-z0-9]\b|[ ]/i.test(event.key)) {
 		keys.push(event.key)
 	}
@@ -126,8 +125,6 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		)
 		return element
 	})
-
-	console.log('elements', elements)
 
 	if (currentElement) {
 		currentElement = removeBorder(currentElement)
