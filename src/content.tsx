@@ -98,7 +98,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	const selectors = 'a, h3, button'
 	const text = keys.join('')
 
-	elements = searchByText(selectors, text)
+	elements = findElementsByText(selectors, text)
 	elements = highlight(elements, text)
 
 	if (currentElement) {
@@ -130,7 +130,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	console.log('elements4', elements)
 })
 
-function searchByText(selectors: string, text: string) {
+function findElementsByText(selectors: string, text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
 
