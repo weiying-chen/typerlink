@@ -9,14 +9,16 @@
 }
 
 #keys {
-	background: #312f44;
+	background: #eee;
+	border: 2px solid #ccc;
+	border-radius: 8px;
 	display: flex;
 	align-items: center;
-	padding: 4px;
+	padding: 4px 8px;
 }
 
 #keys span {
-	color: #fff;
+	color: #222;
 	font-size: 14px;
 }
 
@@ -35,12 +37,11 @@
 }
 
 .highlighted {
-	color: #111;
-	background: #f5ff8d;
+	border: 2px solid #f5ff8d;
+	border-radius: 8px;
 }
 
-.selected {
-	color: #111;
+.highlighted.selected {
 	background: #50cb86;
 }
 
