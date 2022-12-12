@@ -73,13 +73,13 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		currentElement.click()
 		currentElement = document.createElement('div')
 		keys = []
-		elements = removeHighlight(elements)
+		elements = removeElementsHighlight(elements)
 	}
 
 	if (event.key === 'Escape') {
 		keys = []
 		currentElement = document.createElement('div')
-		elements = removeHighlight(elements)
+		elements = removeElementsHighlight(elements)
 	}
 
 	if (event.key === 'Backspace') {
@@ -93,16 +93,16 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	// console.log('keys', keys)
 
 	// Since the text will have an HTML tag, searching for text will be affected
-	elements = removeHighlight(elements)
+	elements = removeElementsHighlight(elements)
 
 	const selectors = 'a, h3, button'
 	const text = keys.join('')
 
 	elements = findElementsByText(selectors, text)
-	elements = highlight(elements, text)
+	elements = highlightElements(elements, text)
 
 	if (currentElement) {
-		currentElement = removeSelected(currentElement)
+		currentElement = removeSelectedElement(currentElement)
 	}
 
 	currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
@@ -123,7 +123,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		elements[0].click()
 		keys = []
 		currentElement = document.createElement('div')
-		elements = removeHighlight(elements)
+		elements = removeElementsHighlight(elements)
 		return
 	}
 
@@ -150,7 +150,7 @@ function findElementsByText(selectors: string, text: string) {
 	})
 }
 
-function highlight(elements: any[], text: string) {
+function highlightElements(elements: any[], text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
 
@@ -163,14 +163,15 @@ function highlight(elements: any[], text: string) {
 	})
 }
 
-function removeHighlight(elements: any[]) {
+function removeElementsHighlight(elements: any[]) {
 	return elements.map((element: any) => {
 		element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
 		return element
 	})
 }
 
-function removeSelected(currentElement: HTMLElement) {
+// TODO: It's only removing the style
+function removeSelectedElement(currentElement: HTMLElement) {
 	currentElement.querySelector('mark')?.classList.remove('selected')
 	return currentElement
 }
