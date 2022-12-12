@@ -97,11 +97,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
 	let text = keys.join('')
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
-	const regExp = new RegExp(text === '' ? '^$' : text)
-	const tags = 'a, h3, button'
+	const selectors = 'a, h3, button'
 
-	elements = searchElements(tags, regExp)
-	elements = highlight(elements, regExp)
+	elements = searchByText(selectors, text)
+	elements = highlight(elements, text)
 
 	if (currentElement) {
 		currentElement = removeSelected(currentElement)
@@ -132,16 +131,18 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	console.log('elements4', elements)
 })
 
-function searchElements(tags: string, regExp: RegExp) {
+function searchByText(selectors: string, text: string) {
 	// TODO: Remove conditional statement nesting
-	return [...document.querySelectorAll(tags)].filter((element) => {
+	const pattern = new RegExp(text === '' ? '^$' : text)
+
+	return [...document.querySelectorAll(selectors)].filter((element) => {
 		if (element.childNodes) {
 			let nodeWithText = [...element.childNodes].find(
 				(childNode) => childNode.nodeType == Node.TEXT_NODE
 			)
 
 			if (nodeWithText) {
-				if (nodeWithText.textContent?.match(regExp)) {
+				if (nodeWithText.textContent?.match(pattern)) {
 					return element
 				}
 			}
@@ -149,10 +150,12 @@ function searchElements(tags: string, regExp: RegExp) {
 	})
 }
 
-function highlight(elements: any[], regExp: RegExp) {
+function highlight(elements: any[], text: string) {
+	const pattern = new RegExp(text === '' ? '^$' : text)
+
 	return elements.map((element) => {
 		element.innerHTML = element.innerHTML.replace(
-			regExp,
+			pattern,
 			'<mark class="highlighted">$&</mark>'
 		)
 		return element
