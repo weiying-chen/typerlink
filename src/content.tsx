@@ -61,7 +61,6 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	}
 
 	// If `return` is added `elements` won't be set correctly below.
-
 	if (event.key === ' ') {
 		event.preventDefault()
 	}
