@@ -95,9 +95,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	// Since the text will have an HTML tag, searching for text will be affected
 	elements = removeHighlight(elements)
 
-	let text = keys.join('')
-	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const selectors = 'a, h3, button'
+	const text = keys.join('')
 
 	elements = searchByText(selectors, text)
 	elements = highlight(elements, text)
@@ -132,9 +131,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 })
 
 function searchByText(selectors: string, text: string) {
-	// TODO: Remove conditional statement nesting
+	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
 
+	// TODO: Remove conditional statement nesting
 	return [...document.querySelectorAll(selectors)].filter((element) => {
 		if (element.childNodes) {
 			let nodeWithText = [...element.childNodes].find(
@@ -151,6 +151,7 @@ function searchByText(selectors: string, text: string) {
 }
 
 function highlight(elements: any[], text: string) {
+	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
 
 	return elements.map((element) => {
