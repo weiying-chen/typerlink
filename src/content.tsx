@@ -105,7 +105,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
 
 	if (currentElement) {
-		currentElement.querySelector('mark')?.classList.add('selected')
+		currentElement.querySelector('span')?.classList.add('selected')
 
 		currentElement.scrollIntoView({
 			block: 'center',
@@ -148,10 +148,11 @@ function highlightText(elements: any[], text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
 
+	// `<mark>` will change `color`.
 	return elements.map((element) => {
 		element.innerHTML = element.innerHTML.replace(
 			pattern,
-			'<mark class="highlighted">$&</mark>'
+			'<span class="highlighted">$&</span>'
 		)
 		return element
 	})
@@ -159,14 +160,14 @@ function highlightText(elements: any[], text: string) {
 
 function removeTextHighlight(elements: any[]) {
 	return elements.map((element: any) => {
-		element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
+		element.innerHTML = element.innerHTML.replace(/<\/?span[^>]*>/, '')
 		return element
 	})
 }
 
 // TODO: It's only removing the style
 function removeSelectedClass(currentElement: HTMLElement) {
-	currentElement.querySelector('mark')?.classList.remove('selected')
+	currentElement.querySelector('span')?.classList.remove('selected')
 	return currentElement
 }
 
