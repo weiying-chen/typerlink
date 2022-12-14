@@ -32,32 +32,11 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	// If some of these conditional statements are put down below, they might not affect `elements`.
 
 	if (event.key === ']') {
-		const nextElement = elements.reduce((result, element, index, array) => {
-			if (element === currentElement) {
-				result =
-					index !== array.length - 1 ? array[index + 1] : array[0]
-			}
-
-			return result
-		}, {})
-
-		selectedElement = nextElement
+		selectedElement = findNextElement(elements, currentElement)
 	}
 
 	if (event.key === '[') {
-		const previousElement = elements.reduce(
-			(result, element, index, array) => {
-				if (element === currentElement) {
-					result =
-						index !== 0 ? array[index - 1] : array[array.length - 1]
-				}
-
-				return result
-			},
-			{}
-		)
-
-		selectedElement = previousElement
+		selectedElement = findPreviousElement(elements, currentElement)
 	}
 
 	// If `return` is added `elements` won't be set correctly below.
@@ -121,7 +100,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		return
 	}
 
-	console.log('elements4', elements)
+	console.log('elements 5', elements)
 })
 
 function findElementsByText(selectors: string, text: string) {
@@ -148,7 +127,7 @@ function highlightText(elements: any[], text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
 
-	// `<mark>` will change `color`.
+	// `<span>` will change `color`.
 	return elements.map((element) => {
 		element.innerHTML = element.innerHTML.replace(
 			pattern,
@@ -169,6 +148,24 @@ function removeTextHighlight(elements: any[]) {
 function removeSelectedClass(currentElement: HTMLElement) {
 	currentElement.querySelector('span')?.classList.remove('selected')
 	return currentElement
+}
+
+function findNextElement(elements: any[], currentElement: HTMLElement) {
+	const currentElementIndex = elements.indexOf(currentElement)
+	const lastElementIndex = elements.length - 1
+	const nextElement = elements[currentElementIndex + 1]
+
+	return currentElementIndex === lastElementIndex ? elements[0] : nextElement
+}
+
+function findPreviousElement(elements: any[], currentElement: HTMLElement) {
+	const currentElementIndex = elements.indexOf(currentElement)
+	const lastElement = elements[elements.length - 1]
+	const previousElement = elements[currentElementIndex - 1]
+
+	return currentElementIndex === 0
+		? lastElement
+		: previousElement
 }
 
 function removeLast(array: string[]) {
