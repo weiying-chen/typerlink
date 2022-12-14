@@ -97,6 +97,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	console.log('elements 6', elements)
 })
 
+// DOM functions
+
 function findElementsByText(selectors: string, text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
@@ -116,8 +118,6 @@ function findElementsByText(selectors: string, text: string) {
 		}
 	})
 }
-
-// Element functions
 
 function highlightText(elements: any[], text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
@@ -145,7 +145,7 @@ function removeSelectedClass(currentElement: HTMLElement) {
 	return currentElement
 }
 
-// Utils
+// Utility functions
 
 function findPrevious(items: any[], currentItem: any) {
 	const currentItemIndex = items.indexOf(currentItem)
@@ -182,7 +182,7 @@ function resetAll() {
 	elements = removeTextHighlight(elements)
 }
 
-// React
+// React component
 
 function App() {
 	let [keysState, setKeysState] = useState<string[]>([])
