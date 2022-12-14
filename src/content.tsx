@@ -32,11 +32,11 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	// If some of these conditional statements are put down below, they might not affect `elements`.
 
 	if (event.key === ']') {
-		selectedElement = findNextElement(elements, currentElement)
+		selectedElement = findNext(elements, currentElement)
 	}
 
 	if (event.key === '[') {
-		selectedElement = findPreviousElement(elements, currentElement)
+		selectedElement = findPrevious(elements, currentElement)
 	}
 
 	// If `return` is added `elements` won't be set correctly below.
@@ -47,15 +47,11 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	if (event.key === 'Enter') {
 		if (!currentElement) return
 		currentElement.click()
-		currentElement = document.createElement('div')
-		keys = []
-		elements = removeTextHighlight(elements)
+		resetAll()
 	}
 
 	if (event.key === 'Escape') {
-		keys = []
-		currentElement = document.createElement('div')
-		elements = removeTextHighlight(elements)
+		resetAll()
 	}
 
 	if (event.key === 'Backspace') {
@@ -94,13 +90,11 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
 	if (elements.length === 1) {
 		elements[0].click()
-		keys = []
-		currentElement = document.createElement('div')
-		elements = removeTextHighlight(elements)
+		resetAll()
 		return
 	}
 
-	console.log('elements 5', elements)
+	console.log('elements 6', elements)
 })
 
 function findElementsByText(selectors: string, text: string) {
@@ -123,6 +117,8 @@ function findElementsByText(selectors: string, text: string) {
 	})
 }
 
+// Element functions
+
 function highlightText(elements: any[], text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
@@ -144,37 +140,49 @@ function removeTextHighlight(elements: any[]) {
 	})
 }
 
-// TODO: It's only removing the style
 function removeSelectedClass(currentElement: HTMLElement) {
 	currentElement.querySelector('span')?.classList.remove('selected')
 	return currentElement
 }
 
-function findNextElement(elements: any[], currentElement: HTMLElement) {
-	const currentElementIndex = elements.indexOf(currentElement)
-	const lastElementIndex = elements.length - 1
-	const nextElement = elements[currentElementIndex + 1]
+// Utils
 
-	return currentElementIndex === lastElementIndex ? elements[0] : nextElement
-}
+function findPrevious(items: any[], currentItem: any) {
+	const currentItemIndex = items.indexOf(currentItem)
+	const lastElement = items[items.length - 1]
+	const previousItem = items[currentItemIndex - 1]
 
-function findPreviousElement(elements: any[], currentElement: HTMLElement) {
-	const currentElementIndex = elements.indexOf(currentElement)
-	const lastElement = elements[elements.length - 1]
-	const previousElement = elements[currentElementIndex - 1]
-
-	return currentElementIndex === 0
+	return currentItemIndex === 0
 		? lastElement
-		: previousElement
+		: previousItem
 }
 
-function removeLast(array: string[]) {
-	return array.filter((item, index, array) => {
-		if (index !== array.length - 1) {
+function findNext(items: any[], currentItem: any) {
+	const currentItemIndex = items.indexOf(currentItem)
+	const lastItemIndex = items.length - 1
+	const nextItem = items[currentItemIndex + 1]
+
+	return currentItemIndex === lastItemIndex ? items[0] : nextItem
+}
+
+function removeLast(items: any[]) {
+	return items.filter((item, index) => {
+		if (index !== items.length - 1) {
 			return item
 		}
 	})
 }
+
+// Reset
+
+// TODO: find a cleaner or more functional way of doing this?
+function resetAll() {
+	keys = []
+	currentElement = document.createElement('div')
+	elements = removeTextHighlight(elements)
+}
+
+// React
 
 function App() {
 	let [keysState, setKeysState] = useState<string[]>([])
