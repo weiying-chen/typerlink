@@ -13,6 +13,8 @@ let currentElement: HTMLElement = document.createElement('div')
 let selectedElement: HTMLElement = document.createElement('div')
 
 document.addEventListener('keydown', (event: KeyboardEvent) => {
+	// ## Exit conditions
+
 	if (isModifier(event)) return
 	if (event.key === 'Shift') return
 	// So it doesn't interfere with Chrome's default space behavior
@@ -28,6 +30,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		keys = []
 		return
 	}
+
+	// ## Key actions
 
 	// If some of these conditional statements are put down below, they might not affect `elements`.
 
@@ -64,6 +68,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 
 	// console.log('keys', keys)
 
+	// ## `elements`
+
 	// Since the text will have an HTML tag, searching for text will be affected
 	elements = removeTextHighlight(elements)
 
@@ -71,7 +77,10 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	const text = keys.join('')
 
 	elements = findElementsByText(selectors, text)
-	elements = highlightText(elements, text)
+
+	// ## `currentElement`
+
+	elements = addTextHighlight(elements, text)
 
 	if (currentElement) {
 		currentElement = removeSelectedClass(currentElement)
@@ -87,6 +96,8 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 			behavior: 'auto',
 		})
 	}
+
+	// ## Only one element
 
 	if (elements.length === 1) {
 		elements[0].click()
@@ -119,7 +130,7 @@ function findElementsByText(selectors: string, text: string) {
 	})
 }
 
-function highlightText(elements: any[], text: string) {
+function addTextHighlight(elements: any[], text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
 	const pattern = new RegExp(text === '' ? '^$' : text)
 
