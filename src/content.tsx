@@ -108,7 +108,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	console.log('elements 6', elements)
 })
 
-// DOM functions
+// ## DOM functions
 
 function findElementsByText(selectors: string, text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
@@ -156,7 +156,7 @@ function removeSelectedClass(currentElement: HTMLElement) {
 	return currentElement
 }
 
-// Utility functions
+// ## Utility functions
 
 function findPrevious(items: any[], currentItem: any) {
 	const currentItemIndex = items.indexOf(currentItem)
@@ -184,7 +184,7 @@ function removeLast(items: any[]) {
 	})
 }
 
-// Reset
+// ## Other functions
 
 // TODO: find a cleaner or more functional way of doing this?
 function resetAll() {
@@ -193,7 +193,7 @@ function resetAll() {
 	elements = removeTextHighlight(elements)
 }
 
-// React component
+// ## React
 
 function App() {
 	let [keysState, setKeysState] = useState<string[]>([])
