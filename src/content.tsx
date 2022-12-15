@@ -2,17 +2,23 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 
-function isModifier(event: KeyboardEvent) {
-	return event.ctrlKey || event.altKey || event.metaKey
-}
+// # Up-level Variables
 
 let keys: string[] = []
 let elements: any[] = []
+
 // TODO: maybe replace creating div with something less hacky
 let currentElement: HTMLElement = document.createElement('div')
 let selectedElement: HTMLElement = document.createElement('div')
 
-document.addEventListener('keydown', (event: KeyboardEvent) => {
+// ## Listeners
+
+document.removeEventListener('keydown', handleKeydown)
+document.addEventListener('keydown', handleKeydown)
+
+// ## Main Function
+
+function handleKeydown(event: KeyboardEvent) {
 	// ## Exit conditions
 
 	if (isModifier(event)) return
@@ -31,7 +37,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		return
 	}
 
-	// ## Key actions
+	// ## Key Actions
 
 	// If some of these conditional statements are put down below, they might not affect `elements`.
 
@@ -97,7 +103,7 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 		})
 	}
 
-	// ## Only one element
+	// ## Only One Element
 
 	if (elements.length === 1) {
 		elements[0].click()
@@ -106,9 +112,9 @@ document.addEventListener('keydown', (event: KeyboardEvent) => {
 	}
 
 	console.log('elements 6', elements)
-})
+}
 
-// ## DOM functions
+// ## DOM Functions
 
 function findElementsByText(selectors: string, text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
@@ -156,7 +162,7 @@ function removeSelectedClass(currentElement: HTMLElement) {
 	return currentElement
 }
 
-// ## Utility functions
+// ## Utility Functions
 
 function findPrevious(items: any[], currentItem: any) {
 	const currentItemIndex = items.indexOf(currentItem)
@@ -184,7 +190,11 @@ function removeLast(items: any[]) {
 	})
 }
 
-// ## Other functions
+function isModifier(event: KeyboardEvent) {
+	return event.ctrlKey || event.altKey || event.metaKey
+}
+
+// ## Other Functions
 
 // TODO: find a cleaner or more functional way of doing this?
 function resetAll() {
