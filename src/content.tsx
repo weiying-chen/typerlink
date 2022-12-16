@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
 
 // # Up-level Variables
@@ -13,23 +13,28 @@ let selectedElement: HTMLElement = document.createElement('div')
 
 // ## Listeners
 
-document.removeEventListener('keydown', handleKeydown)
-document.addEventListener('keydown', handleKeydown)
+// document.removeEventListener('keydown', handleKeydown)
+// document.addEventListener('keydown', handleKeydown)
 
 // ## Main Function
 
 function handleKeydown(event: KeyboardEvent) {
 	// ## Exit conditions
 
+	if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') return
+	if (event.key === 'Backspace') return
+
 	if (isModifier(event)) return
 	if (event.key === 'Shift') return
+
 	// So it doesn't interfere with Chrome's default space behavior
 	if (event.key === ' ' && !keys.length) return
 
 	const target = event.target as HTMLElement
 
 	if (
-		target.nodeName === 'INPUT' ||
+		// TODO: fix this hack
+		// target.nodeName === 'INPUT' ||
 		target.nodeName === 'TEXTAREA' ||
 		target.isContentEditable
 	) {
@@ -64,9 +69,9 @@ function handleKeydown(event: KeyboardEvent) {
 		resetAll()
 	}
 
-	if (event.key === 'Backspace') {
-		keys = removeLast(keys)
-	}
+	// if (event.key === 'Backspace') {
+	// 	keys = removeLast(keys)
+	// }
 
 	if (/\b[a-z0-9]\b|[ ]/i.test(event.key)) {
 		keys.push(event.key)
@@ -123,6 +128,7 @@ function findElementsByText(selectors: string, text: string) {
 	// TODO: Remove conditional statement nesting
 	return [...document.querySelectorAll(selectors)].filter((element) => {
 		if (element.childNodes) {
+			// TODO: should this be const?
 			let nodeWithText = [...element.childNodes].find(
 				(childNode) => childNode.nodeType == Node.TEXT_NODE
 			)
@@ -206,33 +212,69 @@ function resetAll() {
 // ## React
 
 function App() {
-	let [keysState, setKeysState] = useState<string[]>([])
+	// TODO: Global variables could be defined here
+
+	// let [keysState, setKeysState] = useState<string[]>([])
+	const inputRef = useRef<HTMLInputElement>(null)
+	// const keysValue = keysState.map((key: string) => key).join()
+	const [message, setMessage] = useState('Initial value')
 
 	useEffect(() => {
-		function handleKeypress() {
-			setKeysState([...keys])
-		}
+		// function handleKeypress() {
+		// 	setKeysState([...keys])
 
-		document.addEventListener('keydown', handleKeypress)
+		// 	const inputElement = inputRef.current
+		// 	console.log('inputElement', inputElement)
+		// 	console.log('keysValue', keysValue)
+		// 	if (inputElement) {
+		// 		console.log('entered')
+		// 		inputElement.value = keysValue
+		// 	}
+		// }
 
-		return () => {
-			document.removeEventListener('keydown', handleKeypress)
-		}
+		// document.addEventListener('keydown', handleKeypress)
+
+		// return () => {
+		// 	document.removeEventListener('keydown', handleKeypress)
+		// }
 	}, [])
 
-	if (keysState.length) {
+
+	function handleChange (event: any) {
+		setMessage(event.target.value)
+	}
+
+	useEffect(() => {
+		elements = removeTextHighlight(elements)
+
+		const selectors = 'a, h3, button'
+
+		console.log('messageInside:', message)
+		elements = findElementsByText(selectors, message)
+		console.log('elements:', elements)
+		elements = addTextHighlight(elements, message)
+	}, [message])
+
+	console.log('messageOutside', message)
+
+	// console.log('ks', keysState)
+	// if (keysState.length) {
 		return (
 			<div id="keys">
-				<span id="matches">{keysState.map((key: string) => key)}</span>
-				<span id="caret">|</span>
+				<input
+					ref={inputRef}
+					type="text"
+					onChange={handleChange}
+					value={message}
+				/>
 				<span id="count">
 					{elements.indexOf(currentElement) + 1}/{elements.length}
 				</span>
 			</div>
 		)
-	} else {
-		return null
-	}
+	// } else {
+	// 	return null
+	// }
 }
 
 const rootElement = document.createElement('div')
