@@ -169,7 +169,11 @@ function removeSelectedClass(currentElement: HTMLElement) {
 }
 
 // TODO: turn into a pure function
-function setCurrentElement(currentElement: HTMLElement, elements: any[], selectedElement: HTMLElement) {
+function setCurrentElement(
+	currentElement: HTMLElement,
+	elements: any[],
+	selectedElement: HTMLElement
+) {
 	if (currentElement) {
 		currentElement = removeSelectedClass(currentElement)
 	}
@@ -244,31 +248,31 @@ function App() {
 	// let [keysState, setKeysState] = useState<string[]>([])
 	const inputRef = useRef<HTMLInputElement>(null)
 	// const keysValue = keysState.map((key: string) => key).join()
-	const [text, setText] = useState('Initial value')
-	const [key, setKey] = useState('Initial key')
+	const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>({} as KeyboardEvent)
+	const [inputValue, setInputValue] = useState('Initial value')
 
-	function handleChange(event: any) {
-		setText(event.target.value)
+	function isCommand(event: KeyboardEvent) {
+		// TODO: maybe check for non-alphanumeric
+		return event.ctrlKey || event.key === 'Enter' || event.key === 'Escape'
 	}
 
-	const checkKeyPress = useCallback((event: any) => {
-		const target = event.target as HTMLInputElement
-	},[text])
+	function handleDocumentKeyDown(event: any) {
+		if (isCommand(event)) {
+			setDocumentEvent(event)
+		}
+		// event.preventDefault() // to prevent keys like Ctrl + v?
+	}
 
-	function handleOnKeydown(event: any) {
-		setKey(event.key)
+	function handleInputChange(event: any) {
+		setInputValue(event.target.value)
 	}
 
 	useEffect(() => {
 		// Can't use React onKeyDown in input because the event won't trigger outside of the input
-		function handleKeydown(event: KeyboardEvent) {
-			setKey(event.key)
-		}
-
-		document.addEventListener('keydown', handleOnKeydown)
+		document.addEventListener('keydown', handleDocumentKeyDown)
 
 		return () => {
-			document.removeEventListener('keydown', handleOnKeydown)
+			document.removeEventListener('keydown', handleDocumentKeyDown)
 		}
 	}, [])
 
@@ -305,7 +309,11 @@ function App() {
 			// console.log('currentElement', currentElement)
 			// console.log('elements', elements)
 			// console.log('selectedElement', selectedElement)
-			currentElement = setCurrentElement(currentElement, elements, selectedElement)
+			currentElement = setCurrentElement(
+				currentElement,
+				elements,
+				selectedElement
+			)
 
 			// if (currentElement) {
 			// 	currentElement = removeSelectedClass(currentElement)
@@ -319,9 +327,10 @@ function App() {
 
 			// console.log('currentElement', currentElement)
 
+			currentElement.querySelector('span')?.classList.add('selected')
+
 			if (currentElement) {
 				// console.log('querySelector', currentElement.querySelector('span'))
-				currentElement.querySelector('span')?.classList.add('selected')
 				// console.log('currentElement after', currentElement)
 
 				currentElement.scrollIntoView({
@@ -331,54 +340,117 @@ function App() {
 			}
 		}
 
-		document.addEventListener('keydown', checkKeyPress)
+		// document.addEventListener('keydown', checkKeyPress)
 
-		return () => {
-			document.removeEventListener('keydown', checkKeyPress)
-		}
-	}, [checkKeyPress])
+		// return () => {
+		// 	document.removeEventListener('keydown', checkKeyPress)
+		// }
+	}, [])
 
 	useEffect(() => {
-		// elements = removeTextHighlight(elements)
+		// console.log('Value:', value)
+		console.log('keyEvent', documentEvent)
+		console.log('value', inputValue)
 
-		console.log('TEXT', text)
-		console.log('KEY', key)
+		if (documentEvent.key === ']') {
+			selectedElement = findNext(elements, currentElement)
+		}
 
-		// const selectors = 'a, h3, button'
+		if (documentEvent.key === '[') {
+			selectedElement = findPrevious(elements, currentElement)
+		}
 
-		// console.log('text', text)
-		// elements = findElementsByText(selectors, text)
-		// console.log('elements:', elements)
-		// elements = addTextHighlight(elements, text)
+		if (documentEvent.key === 'Enter') {
+			if (!currentElement) return
+			currentElement.click()
+			resetAll()
+		}
 
-		// currentElement = setCurrentElement(currentElement, elements, selectedElement)
+		if (documentEvent.key === 'Escape') {
+			resetAll()
+			return
+		}
 
-		// if (currentElement) {
-		// 	currentElement = removeSelectedClass(currentElement)
-		// }
+		const selectors = 'a, h3, button'
 
-		// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
+		elements = removeTextHighlight(elements)
+		elements = findElementsByText(selectors, inputValue)
+		elements = addTextHighlight(elements, inputValue)
 
-		// if (currentElement) {
-		// 	currentElement.querySelector('span')?.classList.add('selected')
+		if (currentElement) {
+			currentElement = removeSelectedClass(currentElement)
+		}
 
-		// 	currentElement.scrollIntoView({
-		// 		block: 'center',
-		// 		behavior: 'auto',
-		// 	})
-		// }
-	}, [text, key])
+		currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
 
-	// console.log('ks', keysState)
-	// if (keysState.length) {
+		if (currentElement) {
+			currentElement.querySelector('span')?.classList.add('selected')
+
+			currentElement.scrollIntoView({
+				block: 'center',
+				behavior: 'auto',
+			})
+		}
+	}, [documentEvent, inputValue])
+
+	// useEffect(() => {
+	// 	// console.log('KEY')
+
+	// 	if (keyEvent.ctrlKey && keyEvent.key === ']') {
+	// 		selectedElement = findNext(elements, currentElement)
+	// 	}
+
+	// 	if (keyEvent.ctrlKey && keyEvent.key === '[') {
+	// 		selectedElement = findPrevious(elements, currentElement)
+	// 	}
+
+	// 	// currentElement = setCurrentElement(currentElement, elements, selectedElement)
+
+	// 	// if (currentElement) {
+	// 	// 	currentElement = removeSelectedClass(currentElement)
+	// 	// }
+
+	// 	// This is the problem (maybe selectedElement)
+
+	// 	if (!elements.length) return
+	// 	currentElement = elements[0]
+
+	// 	currentElement.innerHTML = currentElement.innerHTML.replace(
+	// 		'React',
+	// 		'<span class="highlighted">$&</span>'
+	// 	)
+
+	// 	// if (currentElement) {
+	// 	// 	currentElement = removeSelectedClass(currentElement)
+	// 	// }
+
+	// 	// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
+	// 	// currentElement.innerHTML = currentElement.innerHTML.replace(
+	// 	// "",
+	// 	// "<span></span>"
+	// 	// )
+
+	// 	if (currentElement) {
+	// 		const spanElement = currentElement.querySelector('span')
+	// 		spanElement?.classList.add('selected')
+	// 		// console.log('currentElement', currentElement)
+	// 		// console.log('spanElement', spanElement)
+
+	// 		currentElement.scrollIntoView({
+	// 			block: 'center',
+	// 			behavior: 'auto',
+	// 		})
+	// 	}
+	// }, [keyEvent])
+
 	return (
 		<div id="keys">
 			<input
 				ref={inputRef}
 				type="text"
-				onChange={handleChange}
+				onChange={handleInputChange}
 				// onKeyDown={handleOnKeydown}
-				value={text}
+				value={inputValue}
 			/>
 			<span id="count">
 				{elements.indexOf(currentElement) + 1}/{elements.length}
