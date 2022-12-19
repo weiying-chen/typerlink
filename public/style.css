@@ -17,19 +17,28 @@
 
 #keys {
 	background: #fff;
-	border: 1px solid #bbb;
-	border-top-color: #999;
+	border: 1px solid #999;
+	border-top-color: #bbb;
 	border-radius: 8px;
 	display: flex;
 	align-items: center;
-	padding: 4px 8px;
+	padding: 8px 8px;
 }
 
-#keys span {
+#keys input {
+	border: 1px solid #bbb;
+	border-top-color: #999;
+	border-radius: 8px;
+	padding: 4px 8px;
 	color: #222;
 	font-size: 16px;
 	font-weight: 500;
 	font-family: 'Nunito', sans-serif;
+	/* needs line-height */
+}
+
+#keys input:focus {
+	outline: none;
 }
 
 #keys #matches {
@@ -42,8 +51,7 @@
 }
 
 #keys #count {
-	color: #888;
-	margin-left: 4px;
+	margin-left: 6px;
 }
 
 .highlighted {

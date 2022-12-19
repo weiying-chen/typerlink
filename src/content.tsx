@@ -238,6 +238,8 @@ function resetAll() {
 	keys = []
 	currentElement = document.createElement('div')
 	elements = removeTextHighlight(elements)
+	// Must remove the highlight before cleaning the element
+	elements = []
 }
 
 // ## React
@@ -248,7 +250,9 @@ function App() {
 	// let [keysState, setKeysState] = useState<string[]>([])
 	const inputRef = useRef<HTMLInputElement>(null)
 	// const keysValue = keysState.map((key: string) => key).join()
-	const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>({} as KeyboardEvent)
+	const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>(
+		{} as KeyboardEvent
+	)
 	const [inputValue, setInputValue] = useState('Initial value')
 
 	function isCommand(event: KeyboardEvent) {
@@ -364,6 +368,8 @@ function App() {
 			if (!currentElement) return
 			currentElement.click()
 			resetAll()
+			console.log('elements:', elements)
+			return
 		}
 
 		if (documentEvent.key === 'Escape') {
@@ -373,24 +379,54 @@ function App() {
 
 		const selectors = 'a, h3, button'
 
-		elements = removeTextHighlight(elements)
-		elements = findElementsByText(selectors, inputValue)
-		elements = addTextHighlight(elements, inputValue)
+		// elements = removeTextHighlight(elements)
+		// elements = findElementsByText(selectors, inputValue)
+		// elements.push('element') // THIS UPDATES ELEMENTS PROPERLY
+		// console.log('inputValue:', inputValue)
 
-		if (currentElement) {
-			currentElement = removeSelectedClass(currentElement)
-		}
+		const pattern = new RegExp(inputValue === '' ? '^$' : inputValue)
 
-		currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
+		// TODO: Remove conditional statement nesting
+		elements = [...document.querySelectorAll(selectors)].filter((element) => {
+			if (element.childNodes) {
+				const nodeWithText = [...element.childNodes].find(
+					(childNode) => childNode.nodeType === Node.TEXT_NODE
+				)
 
-		if (currentElement) {
-			currentElement.querySelector('span')?.classList.add('selected')
+				if (nodeWithText) {
+					// if (nodeWithText.textContent?.match(pattern)) {
+						return element
+					// }
+				}
 
-			currentElement.scrollIntoView({
-				block: 'center',
-				behavior: 'auto',
-			})
-		}
+				// if (nodeWithText) {
+				// 	if (nodeWithText.textContent?.match(pattern)) {
+				// 		return element
+				// 	}
+				// }
+			}
+		})
+
+		console.log('elements.length', elements.length)
+
+		// elements = addTextHighlight(elements, inputValue)
+
+		// if (currentElement) {
+		// 	currentElement = removeSelectedClass(currentElement)
+		// }
+
+		// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
+
+		// if (currentElement) {
+		// 	currentElement.querySelector('span')?.classList.add('selected')
+
+		// 	currentElement.scrollIntoView({
+		// 		block: 'center',
+		// 		behavior: 'auto',
+		// 	})
+		// }
+
+		// console.log('elements:', elements.length)
 	}, [documentEvent, inputValue])
 
 	// useEffect(() => {
