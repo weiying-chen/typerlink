@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client'
 // # Up-level Variables
 
 let keys: string[] = []
-let elements: any[] = []
+// let elements: any[] = []
 
 // TODO: maybe replace creating div with something less hacky
 let currentElement: HTMLElement = document.createElement('div')
@@ -47,11 +47,11 @@ function handleKeydown(event: KeyboardEvent) {
 	// If some of these conditional statements are put down below, they might not affect `elements`.
 
 	if (event.key === ']') {
-		selectedElement = findNext(elements, currentElement)
+		// selectedElement = findNext(elements, currentElement)
 	}
 
 	if (event.key === '[') {
-		selectedElement = findPrevious(elements, currentElement)
+		// selectedElement = findPrevious(elements, currentElement)
 	}
 
 	// If `return` is added `elements` won't be set correctly below.
@@ -82,22 +82,22 @@ function handleKeydown(event: KeyboardEvent) {
 	// ## `elements`
 
 	// Since the text will have an HTML tag, searching for text will be affected
-	elements = removeTextHighlight(elements)
+	// elements = removeTextHighlight(elements)
 
 	const selectors = 'a, h3, button'
 	const text = keys.join('')
 
-	elements = findElementsByText(selectors, text)
+	// elements = findElementsByText(selectors, text)
 
 	// ## `currentElement`
 
-	elements = addTextHighlight(elements, text)
+	// elements = addTextHighlight(elements, text)
 
 	if (currentElement) {
 		currentElement = removeSelectedClass(currentElement)
 	}
 
-	currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
+	// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
 
 	if (currentElement) {
 		currentElement.querySelector('span')?.classList.add('selected')
@@ -110,11 +110,11 @@ function handleKeydown(event: KeyboardEvent) {
 
 	// ## Only One Element
 
-	if (elements.length === 1) {
-		elements[0].click()
-		resetAll()
-		return
-	}
+	// if (elements.length === 1) {
+	// 	elements[0].click()
+	// 	resetAll()
+	// 	return
+	// }
 
 	// console.log('elements 6', elements)
 }
@@ -237,9 +237,9 @@ function isModifier(event: KeyboardEvent) {
 function resetAll() {
 	keys = []
 	currentElement = document.createElement('div')
-	elements = removeTextHighlight(elements)
-	// Must remove the highlight before cleaning the element
-	elements = []
+	// elements = removeTextHighlight(elements)
+	// // Must remove the highlight before cleaning the element
+	// elements = []
 }
 
 // ## React
@@ -248,12 +248,35 @@ function App() {
 	// TODO: Global variables could be defined here
 
 	// let [keysState, setKeysState] = useState<string[]>([])
-	const inputRef = useRef<HTMLInputElement>(null)
+	// const inputRef = useRef<HTMLInputElement>(null)
 	// const keysValue = keysState.map((key: string) => key).join()
 	const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>(
 		{} as KeyboardEvent
 	)
 	const [inputValue, setInputValue] = useState('Initial value')
+	const [elements, setElements] = useState<HTMLElement[]>([])
+
+	function searchDOM(value: string) {
+		const selectors = 'a'
+		const pattern = new RegExp(value === '' ? '^$' : value)
+		return Array.from(document.querySelectorAll(selectors)).filter(
+			(element) => {
+				if (element.childNodes) {
+					const nodeWithText = Array.from(element.childNodes).find(
+						(childNode) => childNode.nodeType === Node.TEXT_NODE
+					)
+
+					return nodeWithText?.textContent?.match(pattern)
+				}
+				return false
+			}
+		)
+	}
+
+	function handleInputChange(event: any) {
+		setInputValue(event.target.value)
+		setElements(searchDOM(event.target.value))
+	}
 
 	function isCommand(event: KeyboardEvent) {
 		// TODO: maybe check for non-alphanumeric
@@ -267,10 +290,6 @@ function App() {
 		// event.preventDefault() // to prevent keys like Ctrl + v?
 	}
 
-	function handleInputChange(event: any) {
-		setInputValue(event.target.value)
-	}
-
 	useEffect(() => {
 		// Can't use React onKeyDown in input because the event won't trigger outside of the input
 		document.addEventListener('keydown', handleDocumentKeyDown)
@@ -280,154 +299,156 @@ function App() {
 		}
 	}, [])
 
-	useEffect(() => {
-		// TODO: Maybe this should be outside of the component
-		function handleKeydown(event: KeyboardEvent) {
-			elements = removeTextHighlight(elements)
+	// useEffect(() => {
+	// 	// TODO: Maybe this should be outside of the component
+	// 	function handleKeydown(event: KeyboardEvent) {
+	// 		elements = removeTextHighlight(elements)
 
-			const target = event.target as HTMLInputElement
+	// 		const target = event.target as HTMLInputElement
 
-			console.log('key', event.key)
-			console.log('value', target.value)
+	// 		console.log('key', event.key)
+	// 		console.log('value', target.value)
 
-			if (event.ctrlKey && event.key === ']') {
-				selectedElement = findNext(elements, currentElement)
-			}
+	// 		if (event.ctrlKey && event.key === ']') {
+	// 			selectedElement = findNext(elements, currentElement)
+	// 		}
 
-			if (event.ctrlKey && event.key === '[') {
-				// console.log('blurred')
+	// 		if (event.ctrlKey && event.key === '[') {
+	// 			// console.log('blurred')
 
-				selectedElement = findPrevious(elements, currentElement)
-			}
+	// 			selectedElement = findPrevious(elements, currentElement)
+	// 		}
 
-			if (event.key === 'Enter') {
-				if (!currentElement) return
-				currentElement.click()
-				resetAll()
-			}
+	// 		if (event.key === 'Enter') {
+	// 			if (!currentElement) return
+	// 			currentElement.click()
+	// 			resetAll()
+	// 		}
 
-			if (event.key === 'Escape') {
-				resetAll()
-			}
+	// 		if (event.key === 'Escape') {
+	// 			resetAll()
+	// 		}
 
-			// console.log('currentElement', currentElement)
-			// console.log('elements', elements)
-			// console.log('selectedElement', selectedElement)
-			currentElement = setCurrentElement(
-				currentElement,
-				elements,
-				selectedElement
-			)
+	// 		// console.log('currentElement', currentElement)
+	// 		// console.log('elements', elements)
+	// 		// console.log('selectedElement', selectedElement)
+	// 		currentElement = setCurrentElement(
+	// 			currentElement,
+	// 			elements,
+	// 			selectedElement
+	// 		)
 
-			// if (currentElement) {
-			// 	currentElement = removeSelectedClass(currentElement)
-			// }
+	// 		// if (currentElement) {
+	// 		// 	currentElement = removeSelectedClass(currentElement)
+	// 		// }
 
-			// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
+	// 		// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
 
-			// console.log('currentElement', currentElement)
+	// 		// console.log('currentElement', currentElement)
 
-			// console.log('currentElement', currentElement)
+	// 		// console.log('currentElement', currentElement)
 
-			// console.log('currentElement', currentElement)
+	// 		// console.log('currentElement', currentElement)
 
-			currentElement.querySelector('span')?.classList.add('selected')
+	// 		currentElement.querySelector('span')?.classList.add('selected')
 
-			if (currentElement) {
-				// console.log('querySelector', currentElement.querySelector('span'))
-				// console.log('currentElement after', currentElement)
+	// 		if (currentElement) {
+	// 			// console.log('querySelector', currentElement.querySelector('span'))
+	// 			// console.log('currentElement after', currentElement)
 
-				currentElement.scrollIntoView({
-					block: 'center',
-					behavior: 'auto',
-				})
-			}
-		}
+	// 			currentElement.scrollIntoView({
+	// 				block: 'center',
+	// 				behavior: 'auto',
+	// 			})
+	// 		}
+	// 	}
 
-		// document.addEventListener('keydown', checkKeyPress)
+	// 	// document.addEventListener('keydown', checkKeyPress)
 
-		// return () => {
-		// 	document.removeEventListener('keydown', checkKeyPress)
-		// }
-	}, [])
+	// 	// return () => {
+	// 	// 	document.removeEventListener('keydown', checkKeyPress)
+	// 	// }
+	// }, [])
 
-	useEffect(() => {
-		// console.log('Value:', value)
-		console.log('keyEvent', documentEvent)
-		console.log('value', inputValue)
+	// useEffect(() => {
+	// 	// console.log('Value:', value)
+	// 	console.log('keyEvent', documentEvent)
+	// 	console.log('value', inputValue)
 
-		if (documentEvent.key === ']') {
-			selectedElement = findNext(elements, currentElement)
-		}
+	// 	if (documentEvent.key === ']') {
+	// 		selectedElement = findNext(elements, currentElement)
+	// 	}
 
-		if (documentEvent.key === '[') {
-			selectedElement = findPrevious(elements, currentElement)
-		}
+	// 	if (documentEvent.key === '[') {
+	// 		selectedElement = findPrevious(elements, currentElement)
+	// 	}
 
-		if (documentEvent.key === 'Enter') {
-			if (!currentElement) return
-			currentElement.click()
-			resetAll()
-			console.log('elements:', elements)
-			return
-		}
+	// 	if (documentEvent.key === 'Enter') {
+	// 		if (!currentElement) return
+	// 		currentElement.click()
+	// 		resetAll()
+	// 		console.log('elements:', elements)
+	// 		return
+	// 	}
 
-		if (documentEvent.key === 'Escape') {
-			resetAll()
-			return
-		}
+	// 	if (documentEvent.key === 'Escape') {
+	// 		resetAll()
+	// 		return
+	// 	}
 
-		const selectors = 'a, h3, button'
+	// 	const selectors = 'a, h3, button'
 
-		// elements = removeTextHighlight(elements)
-		// elements = findElementsByText(selectors, inputValue)
-		// elements.push('element') // THIS UPDATES ELEMENTS PROPERLY
-		// console.log('inputValue:', inputValue)
+	// 	// elements = removeTextHighlight(elements)
+	// 	// elements = findElementsByText(selectors, inputValue)
+	// 	// elements.push('element') // THIS UPDATES ELEMENTS PROPERLY
+	// 	// console.log('inputValue:', inputValue)
 
-		const pattern = new RegExp(inputValue === '' ? '^$' : inputValue)
+	// 	const pattern = new RegExp(inputValue === '' ? '^$' : inputValue)
 
-		// TODO: Remove conditional statement nesting
-		elements = [...document.querySelectorAll(selectors)].filter((element) => {
-			if (element.childNodes) {
-				const nodeWithText = [...element.childNodes].find(
-					(childNode) => childNode.nodeType === Node.TEXT_NODE
-				)
+	// 	// TODO: Remove conditional statement nesting
+	// 	elements = [...document.querySelectorAll(selectors)].filter(
+	// 		(element) => {
+	// 			if (element.childNodes) {
+	// 				const nodeWithText = [...element.childNodes].find(
+	// 					(childNode) => childNode.nodeType === Node.TEXT_NODE
+	// 				)
 
-				if (nodeWithText) {
-					// if (nodeWithText.textContent?.match(pattern)) {
-						return element
-					// }
-				}
+	// 				if (nodeWithText) {
+	// 					// if (nodeWithText.textContent?.match(pattern)) {
+	// 					return element
+	// 					// }
+	// 				}
 
-				// if (nodeWithText) {
-				// 	if (nodeWithText.textContent?.match(pattern)) {
-				// 		return element
-				// 	}
-				// }
-			}
-		})
+	// 				// if (nodeWithText) {
+	// 				// 	if (nodeWithText.textContent?.match(pattern)) {
+	// 				// 		return element
+	// 				// 	}
+	// 				// }
+	// 			}
+	// 		}
+	// 	)
 
-		console.log('elements.length', elements.length)
+	// 	console.log('elements.length', elements.length)
 
-		// elements = addTextHighlight(elements, inputValue)
+	// 	// elements = addTextHighlight(elements, inputValue)
 
-		// if (currentElement) {
-		// 	currentElement = removeSelectedClass(currentElement)
-		// }
+	// 	// if (currentElement) {
+	// 	// 	currentElement = removeSelectedClass(currentElement)
+	// 	// }
 
-		// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
+	// 	// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
 
-		// if (currentElement) {
-		// 	currentElement.querySelector('span')?.classList.add('selected')
+	// 	// if (currentElement) {
+	// 	// 	currentElement.querySelector('span')?.classList.add('selected')
 
-		// 	currentElement.scrollIntoView({
-		// 		block: 'center',
-		// 		behavior: 'auto',
-		// 	})
-		// }
+	// 	// 	currentElement.scrollIntoView({
+	// 	// 		block: 'center',
+	// 	// 		behavior: 'auto',
+	// 	// 	})
+	// 	// }
 
-		// console.log('elements:', elements.length)
-	}, [documentEvent, inputValue])
+	// 	// console.log('elements:', elements.length)
+	// }, [documentEvent, inputValue])
 
 	// useEffect(() => {
 	// 	// console.log('KEY')
@@ -479,10 +500,12 @@ function App() {
 	// 	}
 	// }, [keyEvent])
 
+	console.log('elements:', elements)
+
 	return (
 		<div id="keys">
 			<input
-				ref={inputRef}
+				// ref={inputRef}
 				type="text"
 				onChange={handleInputChange}
 				// onKeyDown={handleOnKeydown}
