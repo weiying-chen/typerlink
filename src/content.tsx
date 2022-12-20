@@ -257,9 +257,14 @@ function App() {
 	const [elements, setElements] = useState<HTMLElement[]>([])
 
 	function searchDOM(value: string) {
-		const selectors = 'a'
+		const selectors = 'abbr'
 		const pattern = new RegExp(value === '' ? '^$' : value)
-		return Array.from(document.querySelectorAll(selectors)).filter(
+		const queried: HTMLElement[] = Array.from(document.querySelectorAll(selectors))
+		console.log('searchDOM:', queried[0].innerHTML)
+		// CLEAN UP THE QUERY
+		const cleaned: HTMLElement[] = removeTextHighlight(queried)
+		console.log('searchDOM cleaned:', queried[0].innerHTML)
+		return cleaned.filter(
 			(element) => {
 				if (element.childNodes) {
 					const nodeWithText = Array.from(element.childNodes).find(
@@ -273,9 +278,31 @@ function App() {
 		)
 	}
 
+	function addTextHighlight(elements: any[], text: string) {
+		// Without `^$`, all the elements on the page will be matched if `text` is empty
+		console.log('addTextHighlight:', elements[0].innerHTML)
+		const pattern = new RegExp(text === '' ? '^$' : text)
+
+		// `<span>` will change `color`.
+		return elements.map((element) => {
+			element.innerHTML = element.innerHTML.replace(
+				pattern,
+				'<span class="highlighted">$&</span>'
+			)
+			return element
+		})
+	}
+
 	function handleInputChange(event: any) {
 		setInputValue(event.target.value)
 		setElements(searchDOM(event.target.value))
+		// console.log('handleInputChange')
+		// console.log('inputValue:', inputValue)
+		// if (elements.length) {
+		// 	console.log('elements:', elements.length)
+		// 	console.log('inputValue:', inputValue)
+		// 	// setElements(addTextHighlight(elements, inputValue))
+		// }
 	}
 
 	function isCommand(event: KeyboardEvent) {
@@ -298,6 +325,14 @@ function App() {
 			document.removeEventListener('keydown', handleDocumentKeyDown)
 		}
 	}, [])
+
+	useEffect(() => {
+		if (elements.length) {
+			// console.log('elements:', elements[0].textContent)
+			// console.log('inputValue:', inputValue)
+			setElements(addTextHighlight(elements, inputValue))
+		}
+	}, [inputValue])
 
 	// useEffect(() => {
 	// 	// TODO: Maybe this should be outside of the component
@@ -500,7 +535,7 @@ function App() {
 	// 	}
 	// }, [keyEvent])
 
-	console.log('elements:', elements)
+	// console.log('elements:', elements)
 
 	return (
 		<div id="keys">
@@ -514,6 +549,8 @@ function App() {
 			<span id="count">
 				{elements.indexOf(currentElement) + 1}/{elements.length}
 			</span>
+			<abbr>qu</abbr>
+			<abbr>wu</abbr>
 		</div>
 	)
 	// } else {
