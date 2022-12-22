@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import { createRoot } from 'react-dom/client'
 
 // # Up-level Variables
@@ -256,53 +256,83 @@ function App() {
 	const [inputValue, setInputValue] = useState('Initial value')
 	const [elements, setElements] = useState<HTMLElement[]>([])
 
-	function searchDOM(value: string) {
+	// function findButtonsByText(value) {
+	// 	const selectors = 'button'
+	// 	const pattern = new RegExp(value === '' ? '^$' : value)
+	// 	return Array.from(document.querySelectorAll(selectors)).filter(
+	// 		(element) => {
+	// 			if (element.childNodes) {
+	// 				const nodeWithText = Array.from(element.childNodes).find(
+	// 					(childNode) => childNode.nodeType === Node.TEXT_NODE
+	// 				)
+
+	// 				return nodeWithText?.textContent?.match(pattern)
+	// 			}
+	// 			return false
+	// 		}
+	// 	)
+	// }
+
+	function findElementsByText(value: string) {
 		const selectors = 'abbr'
 		const pattern = new RegExp(value === '' ? '^$' : value)
-		const queried: HTMLElement[] = Array.from(document.querySelectorAll(selectors))
-		console.log('searchDOM:', queried[0].innerHTML)
-		// CLEAN UP THE QUERY
-		const cleaned: HTMLElement[] = removeTextHighlight(queried)
-		console.log('searchDOM cleaned:', queried[0].innerHTML)
-		return cleaned.filter(
-			(element) => {
-				if (element.childNodes) {
-					const nodeWithText = Array.from(element.childNodes).find(
-						(childNode) => childNode.nodeType === Node.TEXT_NODE
-					)
-
-					return nodeWithText?.textContent?.match(pattern)
-				}
-				return false
-			}
+		return Array.from(document.querySelectorAll(selectors)).filter(
+			(element) => element.innerText.match(pattern)
 		)
 	}
 
-	function addTextHighlight(elements: any[], text: string) {
-		// Without `^$`, all the elements on the page will be matched if `text` is empty
-		console.log('addTextHighlight:', elements[0].innerHTML)
-		const pattern = new RegExp(text === '' ? '^$' : text)
+	// function addTextHighlight(elements: any[], text: string) {
+	// 	// Without `^$`, all the elements on the page will be matched if `text` is empty
+	// 	console.log('addTextHighlight:', elements[0].innerHTML)
+	// 	const pattern = new RegExp(text === '' ? '^$' : text)
 
-		// `<span>` will change `color`.
+	// 	// `<span>` will change `color`.
+	// 	return elements.map((element) => {
+	// 		element.innerHTML = element.innerHTML.replace(
+	// 			pattern,
+	// 			'<span class="highlighted">$&</span>'
+	// 		)
+	// 		return element
+	// 	})
+	// }
+
+	function highlight(elements: any[], value: string) {
 		return elements.map((element) => {
 			element.innerHTML = element.innerHTML.replace(
-				pattern,
-				'<span class="highlighted">$&</span>'
+				value,
+				'<mark>$&</mark>'
 			)
 			return element
 		})
 	}
 
-	function handleInputChange(event: any) {
-		setInputValue(event.target.value)
-		setElements(searchDOM(event.target.value))
-		// console.log('handleInputChange')
-		// console.log('inputValue:', inputValue)
-		// if (elements.length) {
-		// 	console.log('elements:', elements.length)
-		// 	console.log('inputValue:', inputValue)
-		// 	// setElements(addTextHighlight(elements, inputValue))
-		// }
+	function removeHighlight(elements: any[]) {
+		return elements.map((element: any) => {
+			element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
+			return element
+		})
+	}
+
+	// function handleInputChange(event: any) {
+	// 	setInputValue(event.target.value)
+	// 	setElements(searchDOM(event.target.value))
+	// 	// console.log('handleInputChange')
+	// 	// console.log('inputValue:', inputValue)
+	// 	// if (elements.length) {
+	// 	// 	console.log('elements:', elements.length)
+	// 	// 	console.log('inputValue:', inputValue)
+	// 	// 	// setElements(addTextHighlight(elements, inputValue))
+	// 	// }
+	// }
+
+	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+		const { value } = event.target as HTMLInputElement
+		const newElements = findElementsByText(value)
+		// TODOS: `These functions should return a value
+		if (elements.length) removeHighlight(elements)
+		if (newElements.length) highlight(newElements, value)
+		setInputValue(value)
+		setElements(newElements)
 	}
 
 	function isCommand(event: KeyboardEvent) {
@@ -326,13 +356,13 @@ function App() {
 		}
 	}, [])
 
-	useEffect(() => {
-		if (elements.length) {
-			// console.log('elements:', elements[0].textContent)
-			// console.log('inputValue:', inputValue)
-			setElements(addTextHighlight(elements, inputValue))
-		}
-	}, [inputValue])
+	// useEffect(() => {
+	// 	if (elements.length) {
+	// 		// console.log('elements:', elements[0].textContent)
+	// 		// console.log('inputValue:', inputValue)
+	// 		setElements(addTextHighlight(elements, inputValue))
+	// 	}
+	// }, [inputValue])
 
 	// useEffect(() => {
 	// 	// TODO: Maybe this should be outside of the component
