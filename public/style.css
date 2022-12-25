@@ -54,17 +54,11 @@
 	margin-left: 6px;
 }
 
-.highlighted {
+mark {
 	background: #f5ff8d;
 	color: #222;
 }
 
-.highlighted.selected {
+mark.selected {
 	background: #50cb86;
-}
-
-@keyframes cursor-blink {
-	0% {
-    	opacity: 0;
-	  }
 }

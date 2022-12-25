@@ -251,6 +251,7 @@ function App() {
 	)
 	const [inputValue, setInputValue] = useState('Initial value')
 	const [elements, setElements] = useState<HTMLElement[]>([])
+	const [selectedElement, setSelectedElement] = useState<HTMLElement>(document.createElement('div'))
 
 	function findElementsByText(selectors: string, text: string) {
 		// Without `^(?=$)`, when `text` is empty, all the elements on the page will match.
@@ -286,13 +287,16 @@ function App() {
 		const selectors = 'a, button'
 		const { value } = event.target as HTMLInputElement
 		const foundElements = findElementsByText(selectors, value)
-		// TODOS: `These functions should return a value
+		const foundSelectedElement = foundElements[0]
+		// These functions can't be pure, because they have to access the original HTML elements
 		if (elements.length) removeHighlight(elements)
 		if (foundElements.length) addHighlight(foundElements, value)
 		setInputValue(value)
 		setElements(foundElements)
 		console.log('foundElements:', foundElements)
 		console.log('elements:', elements)
+		foundSelectedElement.querySelector('mark')?.classList.add('selected')
+		setSelectedElement(foundSelectedElement)
 	}
 
 	function isCommand(event: KeyboardEvent) {
@@ -535,7 +539,7 @@ function App() {
 				value={inputValue}
 			/>
 			<span id="count">
-				{elements.indexOf(currentElement) + 1}/{elements.length}
+				{elements.indexOf(selectedElement) + 1}/{elements.length}
 			</span>
 			<abbr>qu</abbr>
 			<abbr></abbr>
