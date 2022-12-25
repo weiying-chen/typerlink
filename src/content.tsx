@@ -84,7 +84,7 @@ function handleKeydown(event: KeyboardEvent) {
 	// Since the text will have an HTML tag, searching for text will be affected
 	// elements = removeTextHighlight(elements)
 
-	const selectors = 'a, h3, button'
+	const selectors = 'abbr'
 	const text = keys.join('')
 
 	// elements = findElementsByText(selectors, text)
@@ -274,13 +274,15 @@ function App() {
 	// }
 
 	function findElementsByText(selectors: string, text: string): HTMLElement[] {
-		// Without this, when `text` is empty, all the elements on the page will match.
-		const regexp = new RegExp(text === '' ? '^$' : text)
+		// Without `^(?=$)`, when `text` is empty, all the elements on the page will match.
+		// `/^$/` can't be used, because empty tags will match.
+		const nullRegex = '^(?=$).'
+		const regex = new RegExp(text === '' ? nullRegex : text)
 		const elements = [...document.querySelectorAll<HTMLElement>(selectors)]
 
 		return elements.filter((element) => {
 			// `innerText` will include the spaces created by tags.
-			return element.textContent?.match(regexp)
+			return element.textContent?.match(regex)
 		})
 	}
 
@@ -329,15 +331,14 @@ function App() {
 	// }
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-		const selectors = 'abbr'
+		const selectors = 'a, button'
 		const { value } = event.target as HTMLInputElement
-		const newElements = findElementsByText(selectors, value)
-		console.log('newElements:', newElements)
+		const foundElements = findElementsByText(selectors, value)
 		// TODOS: `These functions should return a value
 		if (elements.length) removeHighlight(elements)
-		if (newElements.length) highlight(newElements, value)
+		if (foundElements.length) highlight(foundElements, value)
 		setInputValue(value)
-		setElements(newElements)
+		setElements(foundElements)
 	}
 
 	function isCommand(event: KeyboardEvent) {
@@ -570,8 +571,6 @@ function App() {
 	// 	}
 	// }, [keyEvent])
 
-	console.log('elements 2:', elements)
-
 	return (
 		<div id="keys">
 			<input
@@ -585,6 +584,7 @@ function App() {
 				{elements.indexOf(currentElement) + 1}/{elements.length}
 			</span>
 			<abbr>qu</abbr>
+			<abbr></abbr>
 		</div>
 	)
 	// } else {
