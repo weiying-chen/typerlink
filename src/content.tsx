@@ -245,39 +245,20 @@ function resetAll() {
 // ## React
 
 function App() {
-	// TODO: Global variables could be defined here
-
-	// let [keysState, setKeysState] = useState<string[]>([])
 	// const inputRef = useRef<HTMLInputElement>(null)
-	// const keysValue = keysState.map((key: string) => key).join()
 	const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>(
 		{} as KeyboardEvent
 	)
 	const [inputValue, setInputValue] = useState('Initial value')
 	const [elements, setElements] = useState<HTMLElement[]>([])
 
-	// function findButtonsByText(value) {
-	// 	const selectors = 'button'
-	// 	const pattern = new RegExp(value === '' ? '^$' : value)
-	// 	return Array.from(document.querySelectorAll(selectors)).filter(
-	// 		(element) => {
-	// 			if (element.childNodes) {
-	// 				const nodeWithText = Array.from(element.childNodes).find(
-	// 					(childNode) => childNode.nodeType === Node.TEXT_NODE
-	// 				)
-
-	// 				return nodeWithText?.textContent?.match(pattern)
-	// 			}
-	// 			return false
-	// 		}
-	// 	)
-	// }
-
-	function findElementsByText(selectors: string, text: string): HTMLElement[] {
+	function findElementsByText(selectors: string, text: string): HTMLElement[] | [] {
 		// Without `^(?=$)`, when `text` is empty, all the elements on the page will match.
 		// `/^$/` can't be used, because empty tags will match.
-		const nullRegex = '^(?=$).'
-		const regex = new RegExp(text === '' ? nullRegex : text)
+		// const nullRegex = '^(?=$).'
+		if (text === '') return []
+
+		const regex = new RegExp(text)
 		const elements = [...document.querySelectorAll<HTMLElement>(selectors)]
 
 		return elements.filter((element) => {
@@ -286,25 +267,10 @@ function App() {
 		})
 	}
 
-	// function addTextHighlight(elements: any[], text: string) {
-	// 	// Without `^$`, all the elements on the page will be matched if `text` is empty
-	// 	console.log('addTextHighlight:', elements[0].innerHTML)
-	// 	const pattern = new RegExp(text === '' ? '^$' : text)
-
-	// 	// `<span>` will change `color`.
-	// 	return elements.map((element) => {
-	// 		element.innerHTML = element.innerHTML.replace(
-	// 			pattern,
-	// 			'<span class="highlighted">$&</span>'
-	// 		)
-	// 		return element
-	// 	})
-	// }
-
-	function highlight(elements: any[], value: string) {
+	function highlight(elements: any[], pattern: string) {
 		return elements.map((element) => {
 			element.innerHTML = element.innerHTML.replace(
-				value,
+				pattern,
 				'<mark>$&</mark>'
 			)
 			return element
@@ -318,18 +284,6 @@ function App() {
 		})
 	}
 
-	// function handleInputChange(event: any) {
-	// 	setInputValue(event.target.value)
-	// 	setElements(searchDOM(event.target.value))
-	// 	// console.log('handleInputChange')
-	// 	// console.log('inputValue:', inputValue)
-	// 	// if (elements.length) {
-	// 	// 	console.log('elements:', elements.length)
-	// 	// 	console.log('inputValue:', inputValue)
-	// 	// 	// setElements(addTextHighlight(elements, inputValue))
-	// 	// }
-	// }
-
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
 		const selectors = 'a, button'
 		const { value } = event.target as HTMLInputElement
@@ -339,6 +293,8 @@ function App() {
 		if (foundElements.length) highlight(foundElements, value)
 		setInputValue(value)
 		setElements(foundElements)
+		console.log('foundElements:', foundElements)
+		console.log('elements:', elements)
 	}
 
 	function isCommand(event: KeyboardEvent) {
