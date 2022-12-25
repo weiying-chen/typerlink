@@ -252,7 +252,7 @@ function App() {
 	const [inputValue, setInputValue] = useState('Initial value')
 	const [elements, setElements] = useState<HTMLElement[]>([])
 
-	function findElementsByText(selectors: string, text: string): HTMLElement[] | [] {
+	function findElementsByText(selectors: string, text: string) {
 		// Without `^(?=$)`, when `text` is empty, all the elements on the page will match.
 		// `/^$/` can't be used, because empty tags will match.
 		// const nullRegex = '^(?=$).'
@@ -267,7 +267,7 @@ function App() {
 		})
 	}
 
-	function highlight(elements: any[], pattern: string) {
+	function addHighlight(elements: any[], pattern: string) {
 		return elements.map((element) => {
 			element.innerHTML = element.innerHTML.replace(
 				pattern,
@@ -290,7 +290,7 @@ function App() {
 		const foundElements = findElementsByText(selectors, value)
 		// TODOS: `These functions should return a value
 		if (elements.length) removeHighlight(elements)
-		if (foundElements.length) highlight(foundElements, value)
+		if (foundElements.length) addHighlight(foundElements, value)
 		setInputValue(value)
 		setElements(foundElements)
 		console.log('foundElements:', foundElements)
