@@ -251,7 +251,9 @@ function App() {
 	)
 	const [inputValue, setInputValue] = useState('Initial value')
 	const [elements, setElements] = useState<HTMLElement[]>([])
-	const [selectedElement, setSelectedElement] = useState<HTMLElement>(document.createElement('div'))
+	const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(
+		null
+	)
 
 	function findElementsByText(selectors: string, text: string) {
 		// Without `^(?=$)`, when `text` is empty, all the elements on the page will match.
@@ -286,15 +288,14 @@ function App() {
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
 		const selectors = 'a, button'
 		const { value } = event.target as HTMLInputElement
+		// TODO: Rename "found" to something else?
 		const foundElements = findElementsByText(selectors, value)
-		const foundSelectedElement = foundElements[0]
+		const foundSelectedElement = foundElements[0] || null
 		// These functions can't be pure, because they have to access the original HTML elements
 		if (elements.length) removeHighlight(elements)
 		if (foundElements.length) addHighlight(foundElements, value)
 		setInputValue(value)
 		setElements(foundElements)
-		console.log('foundElements:', foundElements)
-		console.log('elements:', elements)
 		foundSelectedElement.querySelector('mark')?.classList.add('selected')
 		setSelectedElement(foundSelectedElement)
 	}
@@ -539,7 +540,8 @@ function App() {
 				value={inputValue}
 			/>
 			<span id="count">
-				{elements.indexOf(selectedElement) + 1}/{elements.length}
+				{selectedElement ? elements.indexOf(selectedElement) + 1 : 0}/
+				{elements.length}
 			</span>
 			<abbr>qu</abbr>
 			<abbr></abbr>
