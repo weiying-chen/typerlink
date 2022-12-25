@@ -268,19 +268,17 @@ function App() {
 	}
 
 	function addHighlight(elements: any[], pattern: string) {
-		return elements.map((element) => {
+		elements.forEach((element) => {
 			element.innerHTML = element.innerHTML.replace(
 				pattern,
 				'<mark>$&</mark>'
 			)
-			return element
 		})
 	}
 
 	function removeHighlight(elements: any[]) {
-		return elements.map((element: any) => {
+		elements.forEach((element: any) => {
 			element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
-			return element
 		})
 	}
 
