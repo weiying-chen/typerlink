@@ -274,7 +274,7 @@ function App() {
 	// }
 
 	function findElementsByText(selectors: string, text: string): HTMLElement[] {
-		// Without this, when `text` is empty, all the elements on the page will match
+		// Without this, when `text` is empty, all the elements on the page will match.
 		const regexp = new RegExp(text === '' ? '^$' : text)
 		const elements = [...document.querySelectorAll<HTMLElement>(selectors)]
 
@@ -329,9 +329,10 @@ function App() {
 	// }
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-		const selectors = 'a, button'
+		const selectors = 'abbr'
 		const { value } = event.target as HTMLInputElement
 		const newElements = findElementsByText(selectors, value)
+		console.log('newElements:', newElements)
 		// TODOS: `These functions should return a value
 		if (elements.length) removeHighlight(elements)
 		if (newElements.length) highlight(newElements, value)
@@ -569,7 +570,7 @@ function App() {
 	// 	}
 	// }, [keyEvent])
 
-	// console.log('elements:', elements)
+	console.log('elements 2:', elements)
 
 	return (
 		<div id="keys">
@@ -583,6 +584,7 @@ function App() {
 			<span id="count">
 				{elements.indexOf(currentElement) + 1}/{elements.length}
 			</span>
+			<abbr>qu</abbr>
 		</div>
 	)
 	// } else {
