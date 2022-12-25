@@ -540,6 +540,7 @@ function App() {
 				value={inputValue}
 			/>
 			<span id="count">
+				{/* TODO: Turn this into a variable */}
 				{selectedElement ? elements.indexOf(selectedElement) + 1 : 0}/
 				{elements.length}
 			</span>
