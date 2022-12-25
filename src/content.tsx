@@ -273,12 +273,15 @@ function App() {
 	// 	)
 	// }
 
-	function findElementsByText(value: string) {
-		const selectors = 'abbr'
-		const pattern = new RegExp(value === '' ? '^$' : value)
-		return Array.from(document.querySelectorAll(selectors)).filter(
-			(element) => element.innerText.match(pattern)
-		)
+	function findElementsByText(selectors: string, text: string): HTMLElement[] {
+		// Without this, when `text` is empty, all the elements on the page will match
+		const regexp = new RegExp(text === '' ? '^$' : text)
+		const elements = [...document.querySelectorAll<HTMLElement>(selectors)]
+
+		return elements.filter((element) => {
+			// `innerText` will include the spaces created by tags.
+			return element.textContent?.match(regexp)
+		})
 	}
 
 	// function addTextHighlight(elements: any[], text: string) {
@@ -326,8 +329,9 @@ function App() {
 	// }
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+		const selectors = 'a, button'
 		const { value } = event.target as HTMLInputElement
-		const newElements = findElementsByText(value)
+		const newElements = findElementsByText(selectors, value)
 		// TODOS: `These functions should return a value
 		if (elements.length) removeHighlight(elements)
 		if (newElements.length) highlight(newElements, value)
@@ -579,8 +583,9 @@ function App() {
 			<span id="count">
 				{elements.indexOf(currentElement) + 1}/{elements.length}
 			</span>
-			<abbr>qu</abbr>
-			<abbr>wu</abbr>
+			<abbr className="border-transparent inline-flex w-full items-center border-b-2 justify-center text-base leading-9 px-3 py-0.5 hover:text-link dark:hover:text-link-dark whitespace-nowrap">
+				API
+			</abbr>
 		</div>
 	)
 	// } else {
