@@ -583,9 +583,6 @@ function App() {
 			<span id="count">
 				{elements.indexOf(currentElement) + 1}/{elements.length}
 			</span>
-			<abbr className="border-transparent inline-flex w-full items-center border-b-2 justify-center text-base leading-9 px-3 py-0.5 hover:text-link dark:hover:text-link-dark whitespace-nowrap">
-				API
-			</abbr>
 		</div>
 	)
 	// } else {
