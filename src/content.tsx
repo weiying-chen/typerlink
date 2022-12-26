@@ -294,9 +294,12 @@ function App() {
 		// These functions can't be pure, because they have to access the original HTML elements
 		if (elements.length) removeHighlight(elements)
 		if (foundElements.length) addHighlight(foundElements, value)
+		if (foundSelectedElement)
+			foundSelectedElement
+				.querySelector('mark')
+				?.classList.add('selected')
 		setInputValue(value)
 		setElements(foundElements)
-		foundSelectedElement.querySelector('mark')?.classList.add('selected')
 		setSelectedElement(foundSelectedElement)
 	}
 
