@@ -216,6 +216,9 @@ function findNext(items: any[], currentItem: any) {
 	const lastItemIndex = items.length - 1
 	const nextItem = items[currentItemIndex + 1]
 
+	// console.log('currentItem:', currentItem)
+	// console.log('currentItemIndex', currentItemIndex)
+
 	return currentItemIndex === lastItemIndex ? items[0] : nextItem
 }
 
@@ -249,6 +252,7 @@ function App() {
 	const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>(
 		{} as KeyboardEvent
 	)
+	// TODO: Should use `useRef()` instead?
 	const [inputValue, setInputValue] = useState('Initial value')
 	const [elements, setElements] = useState<HTMLElement[]>([])
 	const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(
@@ -286,7 +290,8 @@ function App() {
 	}
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-		const selectors = 'a, button'
+		// const selectors = 'a, button'
+		const selectors = 'abbr'
 		const { value } = event.target as HTMLInputElement
 		// TODO: Rename "found" to something else?
 		const foundElements = findElementsByText(selectors, value)
@@ -300,6 +305,7 @@ function App() {
 				?.classList.add('selected')
 		setInputValue(value)
 		setElements(foundElements)
+		console.log('foundSelectedElement:', foundSelectedElement)
 		setSelectedElement(foundSelectedElement)
 	}
 
@@ -309,14 +315,17 @@ function App() {
 	}
 
 	function handleDocumentKeyDown(event: any) {
-		if (isCommand(event)) {
-			setDocumentEvent(event)
+		if (!isCommand(event)) return
+			// setDocumentEvent(event)
+		if (event.ctrlKey && event.key === ']') {
+			console.log('selectedElement', selectedElement)
+			// const nextElement = findNext(elements, selectedElement)
 		}
 		// event.preventDefault() // to prevent keys like Ctrl + v?
 	}
 
 	useEffect(() => {
-		// Can't use React onKeyDown in input because the event won't trigger outside of the input
+		// Can't use React events because it can't access `document`.
 		document.addEventListener('keydown', handleDocumentKeyDown)
 
 		return () => {
@@ -547,8 +556,9 @@ function App() {
 				{selectedElement ? elements.indexOf(selectedElement) + 1 : 0}/
 				{elements.length}
 			</span>
-			<abbr>qu</abbr>
-			<abbr></abbr>
+			<abbr>a</abbr>
+			<abbr>b</abbr>
+			<abbr>c</abbr>
 		</div>
 	)
 	// } else {
