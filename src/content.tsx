@@ -291,6 +291,10 @@ function App() {
 		})
 	}
 
+	function addSelected(element: HTMLElement) {
+		element.querySelector('mark')?.classList.add('selected')
+	}
+
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
 		// const selectors = 'a, button'
 		const selectors = 'abbr'
@@ -304,7 +308,8 @@ function App() {
 		if (elements.length) removeHighlight(elements)
 		if (foundElements.length) addHighlight(foundElements, value)
 
-		foundSelectedElement?.querySelector('mark')?.classList.add('selected')
+		// No need to remove `selected` from the previous element because `removeHighlights` is removing `marks`.
+		if (foundSelectedElement) addSelected(foundSelectedElement)
 
 		setInputValue(value)
 		setElements(foundElements)
@@ -320,7 +325,7 @@ function App() {
 		if (!isCommand(event)) return
 		// setDocumentEvent(event)
 		if (event.ctrlKey && event.key === ']') {
-			const nextSelectedElement = findNext(
+			const foundSelectedElement = findNext(
 				elementsRef.current,
 				selectedElementRef.current
 			)
@@ -328,8 +333,10 @@ function App() {
 			selectedElementRef.current
 				?.querySelector('mark')
 				?.classList.remove('selected')
-			nextSelectedElement.querySelector('mark')?.classList.add('selected')
-			setSelectedElement(nextSelectedElement)
+
+			if (foundSelectedElement) addSelected(foundSelectedElement)
+
+			setSelectedElement(foundSelectedElement)
 		}
 		// event.preventDefault() // to prevent keys like Ctrl + v?
 	}
@@ -566,7 +573,7 @@ function App() {
 				{elements.length}
 			</span>
 			<abbr>a</abbr>
-			<abbr>a</abbr>
+			<abbr>aa</abbr>
 			<abbr>b</abbr>
 			<abbr>c</abbr>
 		</div>
