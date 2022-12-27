@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect, ChangeEvent } from 'react'
+import { useState, useEffect, useRef, ChangeEvent } from 'react'
 import { createRoot } from 'react-dom/client'
 
 // # Up-level Variables
@@ -128,7 +128,6 @@ function findElementsByText(selectors: string, text: string) {
 	// TODO: Remove conditional statement nesting
 	return [...document.querySelectorAll(selectors)].filter((element) => {
 		if (element.childNodes) {
-			// TODO: should this be const?
 			const nodeWithText = [...element.childNodes].find(
 				(childNode) => childNode.nodeType == Node.TEXT_NODE
 			)
@@ -249,20 +248,23 @@ function resetAll() {
 
 function App() {
 	// const inputRef = useRef<HTMLInputElement>(null)
-	const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>(
-		{} as KeyboardEvent
-	)
-	// TODO: Should use `useRef()` instead?
+	// const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>(
+	// 	{} as KeyboardEvent
+	// )
 	const [inputValue, setInputValue] = useState('Initial value')
 	const [elements, setElements] = useState<HTMLElement[]>([])
 	const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(
 		null
 	)
 
+	// This is needed because `selectedElement` only the initial state inside `handleDocumentKeyDown`.
+	const selectedElementRef = useRef(selectedElement)
+	const elementsRef = useRef(elements)
+
+	selectedElementRef.current = selectedElement
+	elementsRef.current = elements
+
 	function findElementsByText(selectors: string, text: string) {
-		// Without `^(?=$)`, when `text` is empty, all the elements on the page will match.
-		// `/^$/` can't be used, because empty tags will match.
-		// const nullRegex = '^(?=$).'
 		if (text === '') return []
 
 		const regex = new RegExp(text)
@@ -293,19 +295,19 @@ function App() {
 		// const selectors = 'a, button'
 		const selectors = 'abbr'
 		const { value } = event.target as HTMLInputElement
+
 		// TODO: Rename "found" to something else?
 		const foundElements = findElementsByText(selectors, value)
 		const foundSelectedElement = foundElements[0] || null
+
 		// These functions can't be pure, because they have to access the original HTML elements
 		if (elements.length) removeHighlight(elements)
 		if (foundElements.length) addHighlight(foundElements, value)
-		if (foundSelectedElement)
-			foundSelectedElement
-				.querySelector('mark')
-				?.classList.add('selected')
+
+		foundSelectedElement?.querySelector('mark')?.classList.add('selected')
+
 		setInputValue(value)
 		setElements(foundElements)
-		console.log('foundSelectedElement:', foundSelectedElement)
 		setSelectedElement(foundSelectedElement)
 	}
 
@@ -316,16 +318,24 @@ function App() {
 
 	function handleDocumentKeyDown(event: any) {
 		if (!isCommand(event)) return
-			// setDocumentEvent(event)
+		// setDocumentEvent(event)
 		if (event.ctrlKey && event.key === ']') {
-			console.log('selectedElement', selectedElement)
-			// const nextElement = findNext(elements, selectedElement)
+			const nextSelectedElement = findNext(
+				elementsRef.current,
+				selectedElementRef.current
+			)
+
+			selectedElementRef.current
+				?.querySelector('mark')
+				?.classList.remove('selected')
+			nextSelectedElement.querySelector('mark')?.classList.add('selected')
+			setSelectedElement(nextSelectedElement)
 		}
 		// event.preventDefault() // to prevent keys like Ctrl + v?
 	}
 
 	useEffect(() => {
-		// Can't use React events because it can't access `document`.
+		// A React event handler can't be used, because it can't access `document`.
 		document.addEventListener('keydown', handleDocumentKeyDown)
 
 		return () => {
@@ -548,7 +558,6 @@ function App() {
 				// ref={inputRef}
 				type="text"
 				onChange={handleInputChange}
-				// onKeyDown={handleOnKeydown}
 				value={inputValue}
 			/>
 			<span id="count">
@@ -556,6 +565,7 @@ function App() {
 				{selectedElement ? elements.indexOf(selectedElement) + 1 : 0}/
 				{elements.length}
 			</span>
+			<abbr>a</abbr>
 			<abbr>a</abbr>
 			<abbr>b</abbr>
 			<abbr>c</abbr>
