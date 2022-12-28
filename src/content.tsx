@@ -265,7 +265,7 @@ function App() {
 	elementsRef.current = elements
 
 	function findElementsByText(selectors: string, text: string) {
-		if (text === '') return []
+		if (!text) return []
 
 		const regex = new RegExp(text)
 		const elements = [...document.querySelectorAll<HTMLElement>(selectors)]
@@ -317,6 +317,7 @@ function App() {
 	}
 
 	function isCommand(event: KeyboardEvent) {
+
 		// TODO: maybe check for non-alphanumeric
 		return event.ctrlKey || event.key === 'Enter' || event.key === 'Escape'
 	}
