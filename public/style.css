@@ -17,23 +17,21 @@
 
 #keys {
 	background: #fff;
-	border: 1px solid #999;
+	border: 1px solid #888;
 	border-top-color: #bbb;
 	border-radius: 8px;
 	display: flex;
 	align-items: center;
-	padding: 8px 8px;
-}
-
-#keys input {
-	border: 1px solid #bbb;
-	border-top-color: #999;
-	border-radius: 8px;
-	padding: 4px 8px;
+	padding: 8px 12px;
 	color: #222;
 	font-size: 16px;
 	font-weight: 500;
 	font-family: 'Nunito', sans-serif;
+}
+
+#keys input {
+	border: none;
+	padding: 0;
 	/* needs line-height */
 }
 
