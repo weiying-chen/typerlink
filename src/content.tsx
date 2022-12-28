@@ -251,7 +251,7 @@ function App() {
 	// const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>(
 	// 	{} as KeyboardEvent
 	// )
-	const [inputValue, setInputValue] = useState('Initial value')
+	const [inputValue, setInputValue] = useState('')
 	const [elements, setElements] = useState<HTMLElement[]>([])
 	const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(
 		null
@@ -260,6 +260,7 @@ function App() {
 	// This is needed because `selectedElement` only the initial state inside `handleDocumentKeyDown`.
 	const selectedElementRef = useRef(selectedElement)
 	const elementsRef = useRef(elements)
+	const inputRef = useRef<HTMLInputElement | null>(null)
 
 	selectedElementRef.current = selectedElement
 	elementsRef.current = elements
@@ -344,6 +345,8 @@ function App() {
 
 	useEffect(() => {
 		// A React event handler can't be used, because it can't access `document`.
+		inputRef.current?.focus()
+
 		document.addEventListener('keydown', handleDocumentKeyDown)
 
 		return () => {
@@ -563,7 +566,7 @@ function App() {
 	return (
 		<div id="keys">
 			<input
-				// ref={inputRef}
+				ref={inputRef}
 				type="text"
 				onChange={handleInputChange}
 				value={inputValue}
