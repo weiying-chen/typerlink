@@ -84,7 +84,7 @@ function handleKeydown(event: KeyboardEvent) {
 	// Since the text will have an HTML tag, searching for text will be affected
 	// elements = removeTextHighlight(elements)
 
-	const selectors = 'abbr'
+	const selectors = 'a, button'
 	const text = keys.join('')
 
 	// elements = findElementsByText(selectors, text)
@@ -278,10 +278,10 @@ function App() {
 	}
 
 	function addHighlight(elements: any[], pattern: string) {
-		elements.forEach((element) => {
+		elements.forEach((element, index) => {
 			element.innerHTML = element.innerHTML.replace(
 				pattern,
-				'<mark>$&</mark>'
+				`<mark>$&</mark>`
 			)
 		})
 	}
@@ -298,7 +298,7 @@ function App() {
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
 		// const selectors = 'a, button'
-		const selectors = 'abbr'
+		const selectors = 'a, button'
 		const { value } = event.target as HTMLInputElement
 
 		// TODO: Rename "found" to something else?
@@ -340,6 +340,17 @@ function App() {
 
 			setSelectedElement(foundSelectedElement)
 		}
+
+		if (event.key === 'Enter') {
+			if (!selectedElementRef.current) return
+
+			selectedElementRef.current.click()
+			setInputValue('')
+			setElements([])
+
+			// This will also set `selectedElementRef.current to `null`.
+			setSelectedElement(null)
+		}
 		// event.preventDefault() // to prevent keys like Ctrl + v?
 	}
 
@@ -353,6 +364,14 @@ function App() {
 			document.removeEventListener('keydown', handleDocumentKeyDown)
 		}
 	}, [])
+
+	useEffect(() => {
+		console.log('selectedElement:', selectedElement)
+	}, [selectedElement])
+
+	useEffect(() => {
+		console.log('selectedElementRef.current:', selectedElementRef.current)
+	}, [selectedElementRef.current])
 
 	// useEffect(() => {
 	// 	if (elements.length) {
@@ -576,15 +595,10 @@ function App() {
 				{selectedElement ? elements.indexOf(selectedElement) + 1 : 0}/
 				{elements.length}
 			</span>
-			<abbr>a</abbr>
-			<abbr>aa</abbr>
 			<abbr>b</abbr>
 			<abbr>c</abbr>
 		</div>
 	)
-	// } else {
-	// 	return null
-	// }
 }
 
 const rootElement = document.createElement('div')
