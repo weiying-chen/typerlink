@@ -272,6 +272,7 @@ function App() {
 		const elements = [...document.querySelectorAll<HTMLElement>(selectors)]
 
 		return elements.filter((element) => {
+
 			// `innerText` will include the spaces created by tags.
 			return element.textContent?.match(regex)
 		})
@@ -364,6 +365,10 @@ function App() {
 			document.removeEventListener('keydown', handleDocumentKeyDown)
 		}
 	}, [])
+
+	useEffect(() => {
+		console.log('elements:', elements)
+	}, [elements])
 
 	useEffect(() => {
 		console.log('selectedElement:', selectedElement)
@@ -595,6 +600,7 @@ function App() {
 				{selectedElement ? elements.indexOf(selectedElement) + 1 : 0}/
 				{elements.length}
 			</span>
+			<abbr>a</abbr>
 			<abbr>b</abbr>
 			<abbr>c</abbr>
 		</div>
