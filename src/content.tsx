@@ -366,17 +366,17 @@ function App() {
 		}
 	}, [])
 
-	useEffect(() => {
-		console.log('elements:', elements)
-	}, [elements])
+	// useEffect(() => {
+	// 	console.log('elements:', elements)
+	// }, [elements])
 
-	useEffect(() => {
-		console.log('selectedElement:', selectedElement)
-	}, [selectedElement])
+	// useEffect(() => {
+	// 	console.log('selectedElement:', selectedElement)
+	// }, [selectedElement])
 
-	useEffect(() => {
-		console.log('selectedElementRef.current:', selectedElementRef.current)
-	}, [selectedElementRef.current])
+	// useEffect(() => {
+	// 	console.log('selectedElementRef.current:', selectedElementRef.current)
+	// }, [selectedElementRef.current])
 
 	// useEffect(() => {
 	// 	if (elements.length) {
