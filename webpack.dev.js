@@ -7,10 +7,10 @@ module.exports = merge(config, {
 	mode: 'development',
 	devtool: 'source-map',
 	module: {
+		// For dummy.html
 		rules: [
 			{
 				test: /\.css$/i,
-				// For dummy.html
 				use: [MiniCssExtractPlugin.loader, 'css-loader'],
 			},
 		],
