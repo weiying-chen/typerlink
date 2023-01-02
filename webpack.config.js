@@ -1,6 +1,7 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	entry: {
@@ -19,20 +20,20 @@ module.exports = {
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
-			// {
-			// 	test: /\.css$/i,
-			// 	use: ['style-loader', 'css-loader'],
-			// },
+			{
+				test: /\.css$/i,
+				use: [MiniCssExtractPlugin.loader, 'css-loader'],
+			},
 		],
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
 			filename: 'popup.html',
 			template: './src/popup.html',
-			chunks: ['popup'],
+			chunks: ['content'],
 		}),
 		new CopyPlugin({
 			patterns: [{ from: 'public' }],
 		}),
 	],
-}
+};

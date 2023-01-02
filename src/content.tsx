@@ -1,15 +1,16 @@
-import React from 'react'
-import { useState, useEffect, useRef, ChangeEvent } from 'react'
-import { createRoot } from 'react-dom/client'
+import React from 'react';
+import { useState, useEffect, useRef, ChangeEvent } from 'react';
+import { createRoot } from 'react-dom/client';
+import '../public/style.css';
 
 // # Up-level Variables
 
-let keys: string[] = []
+let keys: string[] = [];
 // let elements: any[] = []
 
 // TODO: maybe replace creating div with something less hacky
-let currentElement: HTMLElement = document.createElement('div')
-let selectedElement: HTMLElement = document.createElement('div')
+let currentElement: HTMLElement = document.createElement('div');
+let selectedElement: HTMLElement = document.createElement('div');
 
 // ## Listeners
 
@@ -21,16 +22,16 @@ let selectedElement: HTMLElement = document.createElement('div')
 function handleKeydown(event: KeyboardEvent) {
 	// ## Exit conditions
 
-	if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') return
-	if (event.key === 'Backspace') return
+	if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') return;
+	if (event.key === 'Backspace') return;
 
-	if (isModifier(event)) return
-	if (event.key === 'Shift') return
+	if (isModifier(event)) return;
+	if (event.key === 'Shift') return;
 
 	// So it doesn't interfere with Chrome's default space behavior
-	if (event.key === ' ' && !keys.length) return
+	if (event.key === ' ' && !keys.length) return;
 
-	const target = event.target as HTMLElement
+	const target = event.target as HTMLElement;
 
 	if (
 		// TODO: fix this hack
@@ -38,8 +39,8 @@ function handleKeydown(event: KeyboardEvent) {
 		target.nodeName === 'TEXTAREA' ||
 		target.isContentEditable
 	) {
-		keys = []
-		return
+		keys = [];
+		return;
 	}
 
 	// ## Key Actions
@@ -56,17 +57,17 @@ function handleKeydown(event: KeyboardEvent) {
 
 	// If `return` is added `elements` won't be set correctly below.
 	if (event.key === ' ') {
-		event.preventDefault()
+		event.preventDefault();
 	}
 
 	if (event.key === 'Enter') {
-		if (!currentElement) return
-		currentElement.click()
-		resetAll()
+		if (!currentElement) return;
+		currentElement.click();
+		resetAll();
 	}
 
 	if (event.key === 'Escape') {
-		resetAll()
+		resetAll();
 	}
 
 	// if (event.key === 'Backspace') {
@@ -74,7 +75,7 @@ function handleKeydown(event: KeyboardEvent) {
 	// }
 
 	if (/\b[a-z0-9]\b|[ ]/i.test(event.key)) {
-		keys.push(event.key)
+		keys.push(event.key);
 	}
 
 	// console.log('keys', keys)
@@ -84,8 +85,8 @@ function handleKeydown(event: KeyboardEvent) {
 	// Since the text will have an HTML tag, searching for text will be affected
 	// elements = removeTextHighlight(elements)
 
-	const selectors = 'a, button'
-	const text = keys.join('')
+	const selectors = 'a, button';
+	const text = keys.join('');
 
 	// elements = findElementsByText(selectors, text)
 
@@ -94,18 +95,18 @@ function handleKeydown(event: KeyboardEvent) {
 	// elements = addTextHighlight(elements, text)
 
 	if (currentElement) {
-		currentElement = removeSelectedClass(currentElement)
+		currentElement = removeSelectedClass(currentElement);
 	}
 
 	// currentElement = selectedElement.innerHTML ? selectedElement : elements[0]
 
 	if (currentElement) {
-		currentElement.querySelector('span')?.classList.add('selected')
+		currentElement.querySelector('span')?.classList.add('selected');
 
 		currentElement.scrollIntoView({
 			block: 'center',
 			behavior: 'auto',
-		})
+		});
 	}
 
 	// ## Only One Element
@@ -123,48 +124,48 @@ function handleKeydown(event: KeyboardEvent) {
 
 function findElementsByText(selectors: string, text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
-	const pattern = new RegExp(text === '' ? '^$' : text)
+	const pattern = new RegExp(text === '' ? '^$' : text);
 
 	// TODO: Remove conditional statement nesting
 	return [...document.querySelectorAll(selectors)].filter((element) => {
 		if (element.childNodes) {
 			const nodeWithText = [...element.childNodes].find(
 				(childNode) => childNode.nodeType == Node.TEXT_NODE
-			)
+			);
 
 			if (nodeWithText) {
 				if (nodeWithText.textContent?.match(pattern)) {
-					return element
+					return element;
 				}
 			}
 		}
-	})
+	});
 }
 
 function addTextHighlight(elements: any[], text: string) {
 	// Without `^$`, all the elements on the page will be matched if `text` is empty
-	const pattern = new RegExp(text === '' ? '^$' : text)
+	const pattern = new RegExp(text === '' ? '^$' : text);
 
 	// `<span>` will change `color`.
 	return elements.map((element) => {
 		element.innerHTML = element.innerHTML.replace(
 			pattern,
 			'<span class="highlighted">$&</span>'
-		)
-		return element
-	})
+		);
+		return element;
+	});
 }
 
 function removeTextHighlight(elements: any[]) {
 	return elements.map((element: any) => {
-		element.innerHTML = element.innerHTML.replace(/<\/?span[^>]*>/, '')
-		return element
-	})
+		element.innerHTML = element.innerHTML.replace(/<\/?span[^>]*>/, '');
+		return element;
+	});
 }
 
 function removeSelectedClass(currentElement: HTMLElement) {
-	currentElement.querySelector('span')?.classList.remove('selected')
-	return currentElement
+	currentElement.querySelector('span')?.classList.remove('selected');
+	return currentElement;
 }
 
 // TODO: turn into a pure function
@@ -174,12 +175,12 @@ function setCurrentElement(
 	selectedElement: HTMLElement
 ) {
 	if (currentElement) {
-		currentElement = removeSelectedClass(currentElement)
+		currentElement = removeSelectedClass(currentElement);
 	}
 
 	// This is the problem (maybe selectedElement)
 
-	return selectedElement.innerHTML ? selectedElement : elements[0]
+	return selectedElement.innerHTML ? selectedElement : elements[0];
 
 	// console.log('currentElement', currentElement)
 
@@ -203,42 +204,42 @@ function setCurrentElement(
 // ## Utility Functions
 
 function findPrevious(items: any[], currentItem: any) {
-	const currentItemIndex = items.indexOf(currentItem)
-	const lastElement = items[items.length - 1]
-	const previousItem = items[currentItemIndex - 1]
+	const currentItemIndex = items.indexOf(currentItem);
+	const lastElement = items[items.length - 1];
+	const previousItem = items[currentItemIndex - 1];
 
-	return currentItemIndex === 0 ? lastElement : previousItem
+	return currentItemIndex === 0 ? lastElement : previousItem;
 }
 
 function findNext(items: any[], currentItem: any) {
-	const currentItemIndex = items.indexOf(currentItem)
-	const lastItemIndex = items.length - 1
-	const nextItem = items[currentItemIndex + 1]
+	const currentItemIndex = items.indexOf(currentItem);
+	const lastItemIndex = items.length - 1;
+	const nextItem = items[currentItemIndex + 1];
 
 	// console.log('currentItem:', currentItem)
 	// console.log('currentItemIndex', currentItemIndex)
 
-	return currentItemIndex === lastItemIndex ? items[0] : nextItem
+	return currentItemIndex === lastItemIndex ? items[0] : nextItem;
 }
 
 function removeLast(items: any[]) {
 	return items.filter((item, index) => {
 		if (index !== items.length - 1) {
-			return item
+			return item;
 		}
-	})
+	});
 }
 
 function isModifier(event: KeyboardEvent) {
-	return event.ctrlKey || event.altKey || event.metaKey
+	return event.ctrlKey || event.altKey || event.metaKey;
 }
 
 // ## Other Functions
 
 // TODO: find a cleaner or more functional way of doing this?
 function resetAll() {
-	keys = []
-	currentElement = document.createElement('div')
+	keys = [];
+	currentElement = document.createElement('div');
 	// elements = removeTextHighlight(elements)
 	// // Must remove the highlight before cleaning the element
 	// elements = []
@@ -251,31 +252,30 @@ function App() {
 	// const [documentEvent, setDocumentEvent] = useState<KeyboardEvent>(
 	// 	{} as KeyboardEvent
 	// )
-	const [inputValue, setInputValue] = useState('')
-	const [elements, setElements] = useState<HTMLElement[]>([])
+	const [inputValue, setInputValue] = useState('');
+	const [elements, setElements] = useState<HTMLElement[]>([]);
 	const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(
 		null
-	)
+	);
 
 	// This is needed because `selectedElement` only the initial state inside `handleDocumentKeyDown`.
-	const selectedElementRef = useRef(selectedElement)
-	const elementsRef = useRef(elements)
-	const inputRef = useRef<HTMLInputElement | null>(null)
+	const selectedElementRef = useRef(selectedElement);
+	const elementsRef = useRef(elements);
+	const inputRef = useRef<HTMLInputElement | null>(null);
 
-	selectedElementRef.current = selectedElement
-	elementsRef.current = elements
+	selectedElementRef.current = selectedElement;
+	elementsRef.current = elements;
 
 	function findElementsByText(selectors: string, text: string) {
-		if (!text) return []
+		if (!text) return [];
 
-		const regex = new RegExp(text)
-		const elements = [...document.querySelectorAll<HTMLElement>(selectors)]
+		const regex = new RegExp(text);
+		const elements = [...document.querySelectorAll<HTMLElement>(selectors)];
 
 		return elements.filter((element) => {
-
 			// `innerText` will include the spaces created by tags.
-			return element.textContent?.match(regex)
-		})
+			return element.textContent?.match(regex);
+		});
 	}
 
 	function addHighlight(elements: any[], pattern: string) {
@@ -283,88 +283,87 @@ function App() {
 			element.innerHTML = element.innerHTML.replace(
 				pattern,
 				`<mark>$&</mark>`
-			)
-		})
+			);
+		});
 	}
 
 	function removeHighlight(elements: any[]) {
 		elements.forEach((element: any) => {
-			element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '')
-		})
+			element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '');
+		});
 	}
 
 	function addSelected(element: HTMLElement) {
-		element.querySelector('mark')?.classList.add('selected')
+		element.querySelector('mark')?.classList.add('selected');
 	}
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
 		// const selectors = 'a, button'
-		const selectors = 'a, button'
-		const { value } = event.target as HTMLInputElement
+		const selectors = 'a, button';
+		const { value } = event.target as HTMLInputElement;
 
 		// TODO: Rename "found" to something else?
-		const foundElements = findElementsByText(selectors, value)
-		const foundSelectedElement = foundElements[0] || null
+		const foundElements = findElementsByText(selectors, value);
+		const foundSelectedElement = foundElements[0] || null;
 
 		// These functions can't be pure, because they have to access the original HTML elements
-		if (elements.length) removeHighlight(elements)
-		if (foundElements.length) addHighlight(foundElements, value)
+		if (elements.length) removeHighlight(elements);
+		if (foundElements.length) addHighlight(foundElements, value);
 
 		// No need to remove `selected` from the previous element because `removeHighlights` is removing `marks`.
-		if (foundSelectedElement) addSelected(foundSelectedElement)
+		if (foundSelectedElement) addSelected(foundSelectedElement);
 
-		setInputValue(value)
-		setElements(foundElements)
-		setSelectedElement(foundSelectedElement)
+		setInputValue(value);
+		setElements(foundElements);
+		setSelectedElement(foundSelectedElement);
 	}
 
 	function isCommand(event: KeyboardEvent) {
-
 		// TODO: maybe check for non-alphanumeric
-		return event.ctrlKey || event.key === 'Enter' || event.key === 'Escape'
+		return event.ctrlKey || event.key === 'Enter' || event.key === 'Escape';
 	}
 
 	function handleDocumentKeyDown(event: any) {
-		if (!isCommand(event)) return
+		if (!isCommand(event)) return;
 		// setDocumentEvent(event)
 		if (event.ctrlKey && event.key === ']') {
 			const foundSelectedElement = findNext(
 				elementsRef.current,
 				selectedElementRef.current
-			)
+			);
 
 			selectedElementRef.current
 				?.querySelector('mark')
-				?.classList.remove('selected')
+				?.classList.remove('selected');
 
-			if (foundSelectedElement) addSelected(foundSelectedElement)
+			if (foundSelectedElement) addSelected(foundSelectedElement);
 
-			setSelectedElement(foundSelectedElement)
+			setSelectedElement(foundSelectedElement);
 		}
 
 		if (event.key === 'Enter') {
-			if (!selectedElementRef.current) return
+			if (!selectedElementRef.current) return;
 
-			selectedElementRef.current.click()
-			setInputValue('')
-			setElements([])
+			selectedElementRef.current.click();
+			setInputValue('');
+			setElements([]);
 
 			// This will also set `selectedElementRef.current to `null`.
-			setSelectedElement(null)
+			setSelectedElement(null);
 		}
 		// event.preventDefault() // to prevent keys like Ctrl + v?
 	}
 
 	useEffect(() => {
 		// A React event handler can't be used, because it can't access `document`.
-		inputRef.current?.focus()
+		inputRef.current?.focus();
 
-		document.addEventListener('keydown', handleDocumentKeyDown)
+		document.addEventListener('keydown', handleDocumentKeyDown);
 
 		return () => {
-			document.removeEventListener('keydown', handleDocumentKeyDown)
-		}
-	}, [])
+			document.removeEventListener('keydown', handleDocumentKeyDown);
+		};
+	}, []);
 
 	// useEffect(() => {
 	// 	console.log('elements:', elements)
@@ -604,14 +603,14 @@ function App() {
 			<abbr>b</abbr>
 			<abbr>c</abbr>
 		</div>
-	)
+	);
 }
 
-const rootElement = document.createElement('div')
+const rootElement = document.createElement('div');
 
-rootElement.setAttribute('id', 'app-wrapper')
-document.body.appendChild(rootElement)
+rootElement.setAttribute('id', 'app-wrapper');
+document.body.appendChild(rootElement);
 
-const root = createRoot(rootElement)
+const root = createRoot(rootElement);
 
-root.render(<App />)
+root.render(<App />);
