@@ -325,10 +325,29 @@ function App() {
 	}
 
 	function handleDocumentKeyDown(event: any) {
+		console.log(event.key)
 		if (!isCommand(event)) return;
 		// setDocumentEvent(event)
+
+		// TODO: Make this DRY.
+		// And maybe there should only be a function inside each key event
 		if (event.ctrlKey && event.key === ']') {
 			const foundSelectedElement = findNext(
+				elementsRef.current,
+				selectedElementRef.current
+			);
+
+			selectedElementRef.current
+				?.querySelector('mark')
+				?.classList.remove('selected');
+
+			if (foundSelectedElement) addSelected(foundSelectedElement);
+
+			setSelectedElement(foundSelectedElement);
+		}
+
+		if (event.ctrlKey && event.key === '[') {
+			const foundSelectedElement = findPrevious(
 				elementsRef.current,
 				selectedElementRef.current
 			);
@@ -356,13 +375,12 @@ function App() {
 			// This will also set `selectedElementRef.current to `null`.
 			setSelectedElement(null);
 		}
-		// event.preventDefault() // to prevent keys like Ctrl + v?
 	}
 
 	useEffect(() => {
-		// A React event handler can't be used, because it can't access `document`.
 		inputRef.current?.focus();
 
+		// A React event handler can't be used, because it can't access `document`.
 		document.addEventListener('keydown', handleDocumentKeyDown);
 
 		return () => {
