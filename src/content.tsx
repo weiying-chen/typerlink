@@ -260,8 +260,8 @@ function App() {
 	);
 
 	// This is needed because `selectedElement` only the initial state inside `handleDocumentKeyDown`.
-	const selectedElementRef = useRef(selectedElement);
 	const elementsRef = useRef(elements);
+	const selectedElementRef = useRef(selectedElement);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
 	selectedElementRef.current = selectedElement;
@@ -347,6 +347,10 @@ function App() {
 
 			selectedElementRef.current.click();
 			setInputValue('');
+
+			// Highlight won't be removed if `elements` are reset.
+			if (elementsRef.current.length) removeHighlight(elementsRef.current);
+
 			setElements([]);
 
 			// This will also set `selectedElementRef.current to `null`.
