@@ -30,7 +30,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			filename: 'popup.html',
 			template: './src/popup.html',
-			chunks: ['content'],
+			chunks: ['popup'],
 		}),
 		new CopyPlugin({
 			patterns: [{ from: 'public' }],
