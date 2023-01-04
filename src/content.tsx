@@ -299,7 +299,7 @@ function App() {
 	}
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-		// const selectors = 'a, button'
+		// The default `input` behavior already ignores Ctrl commands.
 		const selectors = 'a, button';
 		const { value } = event.target as HTMLInputElement;
 
@@ -311,13 +311,13 @@ function App() {
 		if (elements.length) removeHighlight(elements);
 		if (foundElements.length) addHighlight(foundElements, value);
 
-		// No need to remove `selected` from the previous element because `removeHighlights` is removing `marks`.
+		// No need to remove `selected` from the previous element because `removeHighlights` is removing `<marks>`.
 		if (foundSelectedElement) {
 			addSelectedClass(foundSelectedElement);
 			foundSelectedElement.scrollIntoView({
 				block: 'center',
 				behavior: 'auto',
-			})
+			});
 		}
 
 		setInputValue(value);
@@ -327,7 +327,12 @@ function App() {
 
 	function isCommand(event: KeyboardEvent) {
 		// TODO: maybe check for non-alphanumeric
-		return event.ctrlKey || event.key === 'Enter' || event.key === 'Escape';
+		return (
+			event.ctrlKey ||
+			event.key === 'Enter' ||
+			// event.key === 'Escape' ||
+			event.key === '/'
+		);
 	}
 
 	function handleDocumentKeyDown(event: any) {
@@ -351,7 +356,7 @@ function App() {
 				foundSelectedElement.scrollIntoView({
 					block: 'center',
 					behavior: 'auto',
-				})
+				});
 			}
 
 			setSelectedElement(foundSelectedElement);
@@ -372,7 +377,7 @@ function App() {
 				foundSelectedElement.scrollIntoView({
 					block: 'center',
 					behavior: 'auto',
-				})
+				});
 			}
 
 			setSelectedElement(foundSelectedElement);
@@ -385,12 +390,19 @@ function App() {
 			setInputValue('');
 
 			// Highlight won't be removed if `elements` are set to `[]`.
-			if (elementsRef.current.length) removeHighlight(elementsRef.current);
+			if (elementsRef.current.length)
+				removeHighlight(elementsRef.current);
 
 			setElements([]);
 
 			// This will also set `selectedElementRef.current to `null`.
 			setSelectedElement(null);
+		}
+
+		if (event.key === '/') {
+			// To prevent `/` from being inserted in the `input`.
+			event.preventDefault()
+			inputRef.current?.focus();
 		}
 	}
 
