@@ -298,8 +298,6 @@ function App() {
 		element.querySelector('mark')?.classList.add('selected');
 	}
 
-	function 
-
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
 		// const selectors = 'a, button'
 		const selectors = 'a, button';
