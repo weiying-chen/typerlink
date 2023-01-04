@@ -294,9 +294,11 @@ function App() {
 		});
 	}
 
-	function addSelected(element: HTMLElement) {
+	function addSelectedClass(element: HTMLElement) {
 		element.querySelector('mark')?.classList.add('selected');
 	}
+
+	function 
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
 		// const selectors = 'a, button'
@@ -312,7 +314,13 @@ function App() {
 		if (foundElements.length) addHighlight(foundElements, value);
 
 		// No need to remove `selected` from the previous element because `removeHighlights` is removing `marks`.
-		if (foundSelectedElement) addSelected(foundSelectedElement);
+		if (foundSelectedElement) {
+			addSelectedClass(foundSelectedElement);
+			foundSelectedElement.scrollIntoView({
+				block: 'center',
+				behavior: 'auto',
+			})
+		}
 
 		setInputValue(value);
 		setElements(foundElements);
@@ -325,7 +333,6 @@ function App() {
 	}
 
 	function handleDocumentKeyDown(event: any) {
-		console.log(event.key)
 		if (!isCommand(event)) return;
 		// setDocumentEvent(event)
 
@@ -341,7 +348,13 @@ function App() {
 				?.querySelector('mark')
 				?.classList.remove('selected');
 
-			if (foundSelectedElement) addSelected(foundSelectedElement);
+			if (foundSelectedElement) {
+				addSelectedClass(foundSelectedElement);
+				foundSelectedElement.scrollIntoView({
+					block: 'center',
+					behavior: 'auto',
+				})
+			}
 
 			setSelectedElement(foundSelectedElement);
 		}
@@ -356,7 +369,13 @@ function App() {
 				?.querySelector('mark')
 				?.classList.remove('selected');
 
-			if (foundSelectedElement) addSelected(foundSelectedElement);
+			if (foundSelectedElement) {
+				addSelectedClass(foundSelectedElement);
+				foundSelectedElement.scrollIntoView({
+					block: 'center',
+					behavior: 'auto',
+				})
+			}
 
 			setSelectedElement(foundSelectedElement);
 		}
@@ -367,7 +386,7 @@ function App() {
 			selectedElementRef.current.click();
 			setInputValue('');
 
-			// Highlight won't be removed if `elements` are reset.
+			// Highlight won't be removed if `elements` are set to `[]`.
 			if (elementsRef.current.length) removeHighlight(elementsRef.current);
 
 			setElements([]);
