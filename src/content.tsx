@@ -651,9 +651,6 @@ function App() {
 				{selectedElement ? elements.indexOf(selectedElement) + 1 : 0}/
 				{elements.length}
 			</span>
-			<abbr>a</abbr>
-			<abbr>b</abbr>
-			<abbr>c</abbr>
 		</div>
 	);
 }
