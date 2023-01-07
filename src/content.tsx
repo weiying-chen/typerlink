@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { createRoot } from 'react-dom/client';
 // This is being added to dummy.html
-import '../public/style.css';
+import './style.css';
 
 // # Up-level Variables
 
