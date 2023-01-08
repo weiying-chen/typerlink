@@ -169,7 +169,6 @@ function removeSelectedClass(currentElement: HTMLElement) {
 	return currentElement;
 }
 
-// TODO: turn into a pure function
 function setCurrentElement(
 	currentElement: HTMLElement,
 	elements: any[],
@@ -204,7 +203,7 @@ function setCurrentElement(
 
 // ## Utility Functions
 
-function findPrevious(items: any[], currentItem: any) {
+function getPrevious(items: any[], currentItem: any) {
 	const currentItemIndex = items.indexOf(currentItem);
 	const lastElement = items[items.length - 1];
 	const previousItem = items[currentItemIndex - 1];
@@ -212,7 +211,7 @@ function findPrevious(items: any[], currentItem: any) {
 	return currentItemIndex === 0 ? lastElement : previousItem;
 }
 
-function findNext(items: any[], currentItem: any) {
+function getNext(items: any[], currentItem: any) {
 	const currentItemIndex = items.indexOf(currentItem);
 	const lastItemIndex = items.length - 1;
 	const nextItem = items[currentItemIndex + 1];
@@ -270,6 +269,7 @@ function App() {
 	function findElementsByText(selectors: string, text: string) {
 		if (!text) return [];
 
+		// TODO: how about just using `text` and `includes`? 
 		const regex = new RegExp(text);
 		const elements = [...document.querySelectorAll<HTMLElement>(selectors)];
 
@@ -279,12 +279,31 @@ function App() {
 		});
 	}
 
-	function addHighlight(elements: any[], pattern: string) {
+	function findText(node: Node): Text[] {
+		let textNodes = [];
+
+		if (node.nodeType === Node.TEXT_NODE) {
+			textNodes.push(node as Text);
+		}
+
+		node.childNodes.forEach(childNode => {
+			textNodes.push(...findText(childNode));
+		});
+
+		return textNodes;
+	}
+
+	function addHighlight(elements: HTMLElement[], text: string) {
 		elements.forEach((element, index) => {
-			element.innerHTML = element.innerHTML.replace(
-				pattern,
-				`<mark>$&</mark>`
-			);
+			const textNodes = findText(element);
+			// The first text that matches in the `element`.
+			const foundTextNode = textNodes.find(node => node.textContent?.includes(text));
+			const div = document.createElement('div');
+			const innerHTML = (foundTextNode?.textContent ?? '').replace(text, '<mark>$&</mark>')
+			foundTextNode?.parentNode?.insertBefore(div, foundTextNode);
+			div.insertAdjacentHTML('afterend', innerHTML);
+			div.remove();
+			foundTextNode?.remove();
 		});
 	}
 
@@ -342,7 +361,7 @@ function App() {
 		// TODO: Make this DRY.
 		// And maybe there should only be a function inside each key event
 		if (event.ctrlKey && event.key === ']') {
-			const foundSelectedElement = findNext(
+			const foundSelectedElement = getNext(
 				elementsRef.current,
 				selectedElementRef.current
 			);
@@ -363,7 +382,7 @@ function App() {
 		}
 
 		if (event.ctrlKey && event.key === '[') {
-			const foundSelectedElement = findPrevious(
+			const foundSelectedElement = getPrevious(
 				elementsRef.current,
 				selectedElementRef.current
 			);
@@ -401,7 +420,7 @@ function App() {
 
 		if (event.key === '/') {
 			// To prevent `/` from being inserted in the `input`.
-			event.preventDefault()
+			event.preventDefault();
 			inputRef.current?.focus();
 		}
 	}
