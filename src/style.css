@@ -1,17 +1,16 @@
 /* Color theme: https://colorhunt.co/palette/f5ff8d50cb864c74c9312f44 */
 
 @font-face {
-  font-family: 'Nunito';
-  font-style: normal;
-  font-weight: 500;
-  src: url('chrome-extension://__MSG_@@extension_id__/fonts/Nunito-Medium.ttf');
+	font-family: 'Nunito';
+	font-style: normal;
+	font-weight: 500;
+	src: url('chrome-extension://__MSG_@@extension_id__/fonts/Nunito-Medium.ttf');
 }
 
 #app-wrapper {
 	position: fixed;
 	bottom: 10px;
-	left: 50%;
-	transform: translateX(-50%);
+	right: 10px;
 	z-index: 9999;
 }
 
@@ -19,11 +18,11 @@
 #keys {
 	background: #fff;
 	border: 1px solid #999;
-	border-radius: 24px;
+	border-radius: 6px;
 	box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 	display: flex;
 	align-items: center;
-	padding: 8px 18px;
+	padding: 8px 12px;
 	color: #222;
 	line-height: 24px;
 }
@@ -31,7 +30,7 @@
 #keys input,
 #keys #count {
 	font-family: 'Nunito', sans-serif;
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 500;
 }
 
