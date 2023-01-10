@@ -279,7 +279,7 @@ function App() {
 		});
 	}
 
-	function findText(node: Node): Text[] {
+	function getTextNodes(node: Node): Text[] {
 		let textNodes = [];
 
 		if (node.nodeType === Node.TEXT_NODE) {
@@ -287,7 +287,7 @@ function App() {
 		}
 
 		node.childNodes.forEach((childNode) => {
-			textNodes.push(...findText(childNode));
+			textNodes.push(...getTextNodes(childNode));
 		});
 
 		return textNodes;
@@ -295,7 +295,7 @@ function App() {
 
 	function addHighlight(elements: HTMLElement[], text: string) {
 		elements.forEach((element, index) => {
-			const textNodes = findText(element);
+			const textNodes = getTextNodes(element);
 
 			// The first text that matches in the `element`.
 			const foundTextNode = textNodes.find((node) =>
