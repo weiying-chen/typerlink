@@ -4,6 +4,7 @@
 	font-family: 'Nunito';
 	font-style: normal;
 	font-weight: 500;
+	/* TODO: Remove the invalid error in development mode. */
 	src: url('chrome-extension://__MSG_@@extension_id__/fonts/Nunito-Medium.ttf');
 }
 

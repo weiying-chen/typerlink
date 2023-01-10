@@ -9,8 +9,6 @@ module.exports = merge(config, {
 			before: {
 				include: [
 					'./dist/dummy.html',
-					'./dist/content.css',
-					'./dist/content.css.map',
 				],
 			},
 		}),
