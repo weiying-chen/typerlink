@@ -306,7 +306,7 @@ function App() {
 				text,
 				'<mark>$&</mark>'
 			);
-			
+
 			// TODO: turn this into a function to make it declarative?
 			foundTextNode?.parentNode?.insertBefore(div, foundTextNode);
 			div.insertAdjacentHTML('afterend', innerHTML);
@@ -352,6 +352,16 @@ function App() {
 		setSelectedElement(foundSelectedElement);
 	}
 
+	function isInInput(event: KeyboardEvent) {
+		const target = event.target as HTMLElement;
+
+		return (
+			target.nodeName === 'INPUT' ||
+			target.nodeName === 'TEXTAREA' ||
+			target.isContentEditable
+		);
+	}
+
 	function isCommand(event: KeyboardEvent) {
 		// TODO: maybe check for non-alphanumeric
 		return (
@@ -363,8 +373,7 @@ function App() {
 	}
 
 	function handleDocumentKeyDown(event: any) {
-		if (!isCommand(event)) return;
-		// setDocumentEvent(event)
+		if (!isCommand(event) || isInInput(event)) return;
 
 		// TODO: Make this DRY.
 		// And maybe there should only be a function inside each key event
