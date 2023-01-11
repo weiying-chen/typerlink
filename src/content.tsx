@@ -257,6 +257,8 @@ function App() {
 	const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(
 		null
 	);
+	// TODO: Maybe merge this with `inputValue`?
+	const [isInputFocused, setIsInputFocused] = useState(false);
 
 	// This is needed because `selectedElement` only the initial state inside `handleDocumentKeyDown`.
 	const elementsRef = useRef(elements);
@@ -350,6 +352,14 @@ function App() {
 		setInputValue(value);
 		setElements(foundElements);
 		setSelectedElement(foundSelectedElement);
+	}
+
+	function handleInputFocus(event: ChangeEvent<HTMLInputElement>) {
+		setIsInputFocused(true)
+	}
+
+	function handleInputBlur(event: ChangeEvent<HTMLInputElement>) {
+		setIsInputFocused(false)
 	}
 
 	function isInInput(event: KeyboardEvent) {
@@ -680,6 +690,8 @@ function App() {
 				ref={inputRef}
 				type="text"
 				onChange={handleInputChange}
+				onFocus={handleInputFocus}
+				onBlur={handleInputBlur}
 				value={inputValue}
 			/>
 			<span id="count">
