@@ -383,7 +383,7 @@ function App() {
 	}
 
 	function handleDocumentKeyDown(event: any) {
-		if (!isCommand(event) || isInInput(event)) return;
+		if (!isCommand(event)) return;
 
 		// TODO: Make this DRY.
 		// And maybe there should only be a function inside each key event
@@ -445,7 +445,7 @@ function App() {
 			setSelectedElement(null);
 		}
 
-		if (event.key === '/') {
+		if (event.key === '/' && !isInInput(event)) {
 			// To prevent `/` from being inserted in the `input`.
 			event.preventDefault();
 			inputRef.current?.focus();
