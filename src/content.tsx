@@ -354,9 +354,9 @@ function App() {
 		setSelectedElement(foundSelectedElement);
 	}
 
-	function handleInputFocus(event: ChangeEvent<HTMLInputElement>) {
-		setIsInputFocused(true)
-	}
+	// function handleInputFocus(event: ChangeEvent<HTMLInputElement>) {
+	// 	setIsInputFocused(true)
+	// }
 
 	function handleInputBlur(event: ChangeEvent<HTMLInputElement>) {
 		setIsInputFocused(false)
@@ -448,12 +448,16 @@ function App() {
 		if (event.key === '/' && !isInInput(event)) {
 			// To prevent `/` from being inserted in the `input`.
 			event.preventDefault();
-			inputRef.current?.focus();
+			setIsInputFocused(true);
 		}
 	}
 
 	useEffect(() => {
 		inputRef.current?.focus();
+	}, [isInputFocused])
+
+	useEffect(() => {
+		setIsInputFocused(true);
 
 		// A React event handler can't be used, because it can't access `document`.
 		document.addEventListener('keydown', handleDocumentKeyDown);
@@ -685,12 +689,12 @@ function App() {
 	// }, [keyEvent])
 
 	return (
-		<div id="keys">
+		<div id="keys" className={isInputFocused ? "active" : "inactive"}>
 			<input
-				ref={inputRef}
 				type="text"
+				ref={inputRef}
 				onChange={handleInputChange}
-				onFocus={handleInputFocus}
+				// onFocus={handleInputFocus}
 				onBlur={handleInputBlur}
 				value={inputValue}
 			/>
