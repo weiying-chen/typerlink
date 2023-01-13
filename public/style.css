@@ -29,7 +29,7 @@
 }
 
 #keys.active {
-	display: inline-block;
+	display: flex;
 }
 
 #keys.inactive {
