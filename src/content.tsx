@@ -446,7 +446,6 @@ function App() {
 		}
 
 		if (event.key === '/' && !isInInput(event)) {
-			// To prevent `/` from being inserted in the `input`.
 			event.preventDefault();
 			setIsInputFocused(true);
 		}
