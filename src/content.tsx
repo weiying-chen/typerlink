@@ -6,6 +6,11 @@ import { createRoot } from 'react-dom/client';
 
 // # Up-level Variables
 
+type ContentEditableElement = HTMLElement & {
+	contentEditable: 'true' | 'false';
+	innerHTML: string;
+};
+
 let keys: string[] = [];
 // let elements: any[] = []
 
@@ -359,7 +364,7 @@ function App() {
 	// }
 
 	function handleInputBlur(event: ChangeEvent<HTMLInputElement>) {
-		setIsInputFocused(false)
+		setIsInputFocused(false);
 	}
 
 	function isInInput(event: KeyboardEvent) {
@@ -377,7 +382,7 @@ function App() {
 		return (
 			event.ctrlKey ||
 			event.key === 'Enter' ||
-			// event.key === 'Escape' ||
+			event.key === 'Escape' ||
 			event.key === '/'
 		);
 	}
@@ -445,15 +450,32 @@ function App() {
 			setSelectedElement(null);
 		}
 
+		if (event.key === 'Escape') {
+			(
+				document.activeElement as
+					| HTMLInputElement
+					| HTMLTextAreaElement
+					| ContentEditableElement
+			)?.blur();
+
+			setInputValue('');
+
+			// Highlight won't be removed if `elements` are set to `[]`.
+			if (elementsRef.current.length)
+				removeHighlight(elementsRef.current);
+
+			setElements([]);
+
+			// This will also set `selectedElementRef.current to `null`.
+			setSelectedElement(null);
+		}
+
 		if (event.key === '/' && !isInInput(event)) {
+			// Prevents `/` from being input.
 			event.preventDefault();
 			setIsInputFocused(true);
 		}
 	}
-
-	useEffect(() => {
-		inputRef.current?.focus();
-	}, [isInputFocused])
 
 	useEffect(() => {
 		setIsInputFocused(true);
@@ -465,6 +487,10 @@ function App() {
 			document.removeEventListener('keydown', handleDocumentKeyDown);
 		};
 	}, []);
+
+	useEffect(() => {
+		inputRef.current?.focus();
+	}, [isInputFocused]);
 
 	// useEffect(() => {
 	// 	console.log('elements:', elements)
@@ -688,7 +714,7 @@ function App() {
 	// }, [keyEvent])
 
 	return (
-		<div id="keys" className={isInputFocused ? "active" : "inactive"}>
+		<div id="keys" className={isInputFocused ? 'active' : 'inactive'}>
 			<input
 				type="text"
 				ref={inputRef}
