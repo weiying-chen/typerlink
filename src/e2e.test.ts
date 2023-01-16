@@ -26,8 +26,11 @@ describe('Puppeteer Test', () => {
 		browser = await puppeteer.launch({
 			headless: false,
 			defaultViewport: null,
-        args: [
-        '--disable-extensions-except=/home/alex/node/chrome-extension-react-typescript-3/dist',
+      
+      // This is necessary to make `--load-extension` work 
+      ignoreDefaultArgs: true,
+      args: [
+        // '--disable-extensions-except=/home/alex/node/chrome-extension-react-typescript-3/dist',
         '--load-extension=/home/alex/node/chrome-extension-react-typescript-3/dist',
       ]
 		});
