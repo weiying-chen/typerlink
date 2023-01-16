@@ -28,7 +28,7 @@ describe('Puppeteer Test', () => {
 			defaultViewport: null,
       
       // This is necessary to make `--load-extension` work 
-      ignoreDefaultArgs: true,
+      ignoreDefaultArgs: ['--disable-extensions'],
       args: [
         // '--disable-extensions-except=/home/alex/node/chrome-extension-react-typescript-3/dist',
         '--load-extension=/home/alex/node/chrome-extension-react-typescript-3/dist',
