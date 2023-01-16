@@ -26,13 +26,13 @@ describe('Puppeteer Test', () => {
 		browser = await puppeteer.launch({
 			headless: false,
 			defaultViewport: null,
-      
-      // This is necessary to make `--load-extension` work 
-      ignoreDefaultArgs: ['--disable-extensions'],
-      args: [
-        // '--disable-extensions-except=/home/alex/node/chrome-extension-react-typescript-3/dist',
-        '--load-extension=/home/alex/node/chrome-extension-react-typescript-3/dist',
-      ]
+
+			// This is necessary to make `--load-extension` work
+			ignoreDefaultArgs: ['--disable-extensions'],
+			args: [
+				// '--disable-extensions-except=/home/alex/node/chrome-extension-react-typescript-3/dist',
+				'--load-extension=/home/alex/node/chrome-extension-react-typescript-3/dist',
+			],
 		});
 		page = await browser.newPage();
 	});
@@ -40,7 +40,7 @@ describe('Puppeteer Test', () => {
 	test('type test', async () => {
 		await page.goto('http://localhost:5500/dist/dummy.html');
 		await page.type('#keys input', 'test');
-    await page.waitForTimeout(2000)
+		await page.waitForTimeout(2000);
 		const text = await page.$eval('#keys input', (el) => el.value);
 		expect(text).toBe('test');
 	});
