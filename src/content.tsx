@@ -365,6 +365,16 @@ function App() {
 
 	function handleInputBlur(event: ChangeEvent<HTMLInputElement>) {
 		setIsInputFocused(false);
+		setInputValue('');
+
+		// Highlight won't be removed if `elements` are set to `[]`.
+		if (elementsRef.current.length)
+			removeHighlight(elementsRef.current);
+
+		setElements([]);
+
+		// This will also set `selectedElementRef.current to `null`.
+		setSelectedElement(null);
 	}
 
 	function isInInput(event: KeyboardEvent) {
@@ -457,17 +467,6 @@ function App() {
 					| HTMLTextAreaElement
 					| ContentEditableElement
 			)?.blur();
-
-			setInputValue('');
-
-			// Highlight won't be removed if `elements` are set to `[]`.
-			if (elementsRef.current.length)
-				removeHighlight(elementsRef.current);
-
-			setElements([]);
-
-			// This will also set `selectedElementRef.current to `null`.
-			setSelectedElement(null);
 		}
 
 		if (event.key === '/' && !isInInput(event)) {
