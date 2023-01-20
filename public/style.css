@@ -28,14 +28,6 @@
 	line-height: 24px;
 }
 
-#keys.active {
-	display: flex;
-}
-
-#keys.inactive {
-	display: none;
-}
-
 #keys input,
 #keys #count {
 	font-family: 'Nunito', sans-serif;
