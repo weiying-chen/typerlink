@@ -1,28 +1,13 @@
 import React from 'react';
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { createRoot } from 'react-dom/client';
+import { getPrevious, getNext } from './utils'
 // import './style.css';
 
 type ContentEditableElement = HTMLElement & {
 	contentEditable: 'true' | 'false';
 	innerHTML: string;
 };
-
-function getPrevious(items: any[], currentItem: any) {
-	const currentItemIndex = items.indexOf(currentItem);
-	const lastElement = items[items.length - 1];
-	const previousItem = items[currentItemIndex - 1];
-
-	return currentItemIndex === 0 ? lastElement : previousItem;
-}
-
-function getNext(items: any[], currentItem: any) {
-	const currentItemIndex = items.indexOf(currentItem);
-	const lastItemIndex = items.length - 1;
-	const nextItem = items[currentItemIndex + 1];
-
-	return currentItemIndex === lastItemIndex ? items[0] : nextItem;
-}
 
 function App() {
 	const [inputValue, setInputValue] = useState('');
