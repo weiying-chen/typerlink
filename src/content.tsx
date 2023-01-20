@@ -1,7 +1,14 @@
 import React from 'react';
 import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { createRoot } from 'react-dom/client';
-import { getPrevious, getNext } from './utils'
+import {
+	getPrevious,
+	getNext,
+	findElementsByText,
+	addHighlight,
+	removeHighlight,
+	addSelectedClass,
+} from './utils';
 // import './style.css';
 
 type ContentEditableElement = HTMLElement & {
@@ -25,65 +32,6 @@ function App() {
 
 	selectedElementRef.current = selectedElement;
 	elementsRef.current = elements;
-
-	function findElementsByText(selectors: string, text: string) {
-		if (!text) return [];
-
-		// TODO: how about just using `text` and `includes`?
-		const regex = new RegExp(text);
-		const elements = [...document.querySelectorAll<HTMLElement>(selectors)];
-
-		return elements.filter((element) => {
-			// `innerText` will include the spaces created by tags.
-			return element.textContent?.match(regex);
-		});
-	}
-
-	function getTextNodes(node: Node): Text[] {
-		let textNodes = [];
-
-		if (node.nodeType === Node.TEXT_NODE) {
-			textNodes.push(node as Text);
-		}
-
-		node.childNodes.forEach((childNode) => {
-			textNodes.push(...getTextNodes(childNode));
-		});
-
-		return textNodes;
-	}
-
-	function addHighlight(elements: HTMLElement[], text: string) {
-		elements.forEach((element, index) => {
-			const textNodes = getTextNodes(element);
-
-			// The first text that matches in the `element`.
-			const foundTextNode = textNodes.find((node) =>
-				node.textContent?.includes(text)
-			);
-			const div = document.createElement('div');
-			const innerHTML = (foundTextNode?.textContent ?? '').replace(
-				text,
-				'<mark>$&</mark>'
-			);
-
-			// TODO: turn this into a function to make it declarative?
-			foundTextNode?.parentNode?.insertBefore(div, foundTextNode);
-			div.insertAdjacentHTML('afterend', innerHTML);
-			div.remove();
-			foundTextNode?.remove();
-		});
-	}
-
-	function removeHighlight(elements: any[]) {
-		elements.forEach((element: any) => {
-			element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '');
-		});
-	}
-
-	function addSelectedClass(element: HTMLElement) {
-		element.querySelector('mark')?.classList.add('selected');
-	}
 
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
 		// The default `input` behavior already ignores Ctrl commands.
@@ -117,8 +65,7 @@ function App() {
 		setInputValue('');
 
 		// Highlight won't be removed if `elements` are set to `[]`.
-		if (elementsRef.current.length)
-			removeHighlight(elementsRef.current);
+		if (elementsRef.current.length) removeHighlight(elementsRef.current);
 
 		setElements([]);
 

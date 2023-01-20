@@ -13,3 +13,62 @@ export function getNext(items: any[], currentItem: any) {
 
 	return currentItemIndex === lastItemIndex ? items[0] : nextItem;
 }
+
+export function getTextNodes(node: Node): Text[] {
+	let textNodes = [];
+
+	if (node.nodeType === Node.TEXT_NODE) {
+		textNodes.push(node as Text);
+	}
+
+	node.childNodes.forEach((childNode) => {
+		textNodes.push(...getTextNodes(childNode));
+	});
+
+	return textNodes;
+}
+
+export function findElementsByText(selectors: string, text: string) {
+	if (!text) return [];
+
+	// TODO: how about just using `text` and `includes`?
+	const regex = new RegExp(text);
+	const elements = [...document.querySelectorAll<HTMLElement>(selectors)];
+
+	return elements.filter((element) => {
+		// `innerText` will include the spaces created by tags.
+		return element.textContent?.match(regex);
+	});
+}
+
+export function addHighlight(elements: HTMLElement[], text: string) {
+	elements.forEach((element, index) => {
+		const textNodes = getTextNodes(element);
+
+		// The first text that matches in the `element`.
+		const foundTextNode = textNodes.find((node) =>
+			node.textContent?.includes(text)
+		);
+		const div = document.createElement('div');
+		const innerHTML = (foundTextNode?.textContent ?? '').replace(
+			text,
+			'<mark>$&</mark>'
+		);
+
+		// TODO: turn this into a function to make it declarative?
+		foundTextNode?.parentNode?.insertBefore(div, foundTextNode);
+		div.insertAdjacentHTML('afterend', innerHTML);
+		div.remove();
+		foundTextNode?.remove();
+	});
+}
+
+export function removeHighlight(elements: any[]) {
+	elements.forEach((element: any) => {
+		element.innerHTML = element.innerHTML.replace(/<\/?mark[^>]*>/, '');
+	});
+}
+
+export function addSelectedClass(element: HTMLElement) {
+	element.querySelector('mark')?.classList.add('selected');
+}
