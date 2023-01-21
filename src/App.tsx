@@ -184,8 +184,6 @@ function App() {
 		inputRef.current?.focus();
 	}, [isInputFocused]);
 	
-	console.log('worked');
-
 	return (
 		<div id="keys" style={{ display: isInputFocused ? 'flex' : 'none' }}>
 			<input

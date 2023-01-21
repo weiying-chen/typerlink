@@ -6,7 +6,7 @@ describe('Puppeteer Test', () => {
 
 	beforeAll(async () => {
 		browser = await puppeteer.launch({
-			headless: false,
+			headless: true,
 			defaultViewport: null,
 
 			// This is necessary to make `--load-extension` work
@@ -18,6 +18,12 @@ describe('Puppeteer Test', () => {
 		});
 		page = await browser.newPage();
 		await page.goto('http://localhost:5500/dist/dummy.html');
+	});
+
+	test('`#keys` has display: none on page load', async () => {
+		await page.waitForSelector('#keys');
+		const display = await page.$eval('#keys', el => getComputedStyle(el).display);
+		expect(display).toBe('none');
 	});
 
 	test('`#keys` has display: flex after pressing `/`', async () => {
