@@ -28,7 +28,7 @@ export function getTextNodes(node: Node): Text[] {
 	return textNodes;
 }
 
-export function findElementsByText(selectors: string, text: string) {
+export function filterElementsByText(selectors: string, text: string) {
 	if (!text) return [];
 
 	// TODO: how about just using `text` and `includes`?

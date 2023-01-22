@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import {
 	getPrevious,
 	getNext,
-	findElementsByText,
+	filterElementsByText,
 	addHighlight,
 	removeHighlight,
 	addSelectedClass,
@@ -38,7 +38,7 @@ function App() {
 		const { value } = event.target as HTMLInputElement;
 
 		// TODO: Rename "found" to something else?
-		const foundElements = findElementsByText(selectors, value);
+		const foundElements = filterElementsByText(selectors, value);
 		const foundSelectedElement = foundElements[0] || null;
 
 		// These functions can't be pure, because they have to access the original HTML elements
