@@ -22,4 +22,6 @@ describe('App Test', () => {
 
 		expect(input).toBeVisible();
 	});
+
+	// TODO: Use the `container` option to inject dummy HTML? https://testing-library.com/docs/react-testing-library/api/#container
 });
