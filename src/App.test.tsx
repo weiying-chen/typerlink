@@ -20,15 +20,17 @@ describe('`input`', () => {
 
 	test('is visible after pressing `/`', () => {
 		render(<App />);
+
+		// TODO: See if can use `userEvent` instead.
 		fireEvent.keyDown(document, { key: '/' });
 
 		const input = screen.getByRole('textbox');
 
 		expect(input).toBeVisible();
 	});
-})
+});
 
-describe('`button`', () => {
+describe('target element', () => {
 	test('has been highlighted`', async () => {
 		const { container } = render(
 			<>
@@ -37,20 +39,24 @@ describe('`button`', () => {
 			</>
 		);
 
+		// TODO: See if can use `userEvent` instead.
 		fireEvent.keyDown(document, { key: '/' });
 
 		const input = screen.getByRole('textbox');
 
-		await userEvent.type(input, 'B');
+		await userEvent.type(input, 'Link');
 
-		const button = screen.getByRole('button');
+		const link = screen.getByRole('link');
 
-		expect(container).toMatchSnapshot();
-		expect(button).toBeVisible();
+		// `getByRole('mark')` doesn't work for now, so this is a temporary replacement.
+		const mark = within(link).getByText('Link');
 
+		expect(mark).toBeInTheDocument()
+		expect(mark.tagName).toBe('MARK') 
+	
 		// TODO: Ask ChatGPT
-		// 1. the best way to test <button><mark>B</mark></button> 
+		// 1. the best way to test <a href="#"><mark>Link text</mark></a>
 		// 2. If jest.mock() should be used
-		// 3. If can change the `fireEvent`s to `userEvent`s. 
+		// 3. If can change the `fireEvent`s to `userEvent`s.
 	});
 });

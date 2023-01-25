@@ -3,7 +3,7 @@ import React from 'react';
 function Dummy () {
 	return (
 		<div id="dummy">
-			<button>Button</button>
+			<a href="#">Link text</a>
 		</div>
 	);
 };
