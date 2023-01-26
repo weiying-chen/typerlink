@@ -18,10 +18,9 @@ describe('`input`', () => {
 		expect(input).not.toBeVisible();
 	});
 
-	test('is visible after pressing `/`', () => {
-		render(<App />);
+	test('is visible after pressing `/`', async () => {
+		const { container } = render(<App />);
 
-		// TODO: See if can use `userEvent` instead.
 		fireEvent.keyDown(document, { key: '/' });
 
 		const input = screen.getByRole('textbox');
@@ -30,8 +29,8 @@ describe('`input`', () => {
 	});
 });
 
-describe('target element', () => {
-	test('has been highlighted`', async () => {
+describe('link', () => {
+	beforeEach(async () => {
 		const { container } = render(
 			<>
 				<Dummy />
@@ -39,24 +38,23 @@ describe('target element', () => {
 			</>
 		);
 
-		// TODO: See if can use `userEvent` instead.
 		fireEvent.keyDown(document, { key: '/' });
-
 		const input = screen.getByRole('textbox');
-
 		await userEvent.type(input, 'Link');
-
 		const link = screen.getByRole('link');
+	});
 
-		// `getByRole('mark')` doesn't work for now, so this is a temporary replacement.
+	test('has been highlighted`', async () => {
+		const link = screen.getByRole('link');
 		const mark = within(link).getByText('Link');
+		expect(mark).toBeInTheDocument();
+		expect(mark.tagName).toBe('MARK');
+	});
 
-		expect(mark).toBeInTheDocument()
-		expect(mark.tagName).toBe('MARK') 
-	
-		// TODO: Ask ChatGPT
-		// 1. the best way to test <a href="#"><mark>Link text</mark></a>
-		// 2. If jest.mock() should be used
-		// 3. If can change the `fireEvent`s to `userEvent`s.
+	test('has had highlight removed', async () => {
+		fireEvent.keyDown(document, { key: 'Escape' });
+		const link = screen.getByRole('link');
+		const mark = within(link).queryByText('Link');
+		expect(mark).not.toBeInTheDocument();
 	});
 });
