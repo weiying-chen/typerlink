@@ -39,22 +39,28 @@ describe('link', () => {
 		);
 
 		fireEvent.keyDown(document, { key: '/' });
+
 		const input = screen.getByRole('textbox');
+
 		await userEvent.type(input, 'Link');
+
 		const link = screen.getByRole('link');
 	});
 
 	test('has been highlighted`', () => {
 		const link = screen.getByRole('link');
 		const mark = within(link).getByText('Link');
+		
 		expect(mark).toBeInTheDocument();
 		expect(mark.tagName).toBe('MARK');
 	});
 
 	test('has had highlight removed', () => {
 		fireEvent.keyDown(document, { key: 'Escape' });
+
 		const link = screen.getByRole('link');
 		const mark = within(link).queryByText('Link');
+
 		expect(mark).not.toBeInTheDocument();
 	});
 });
