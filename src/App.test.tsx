@@ -43,8 +43,6 @@ describe('link', () => {
 		const input = screen.getByRole('textbox');
 
 		await userEvent.type(input, 'Link');
-
-		const link = screen.getByRole('link');
 	});
 
 	test('has been highlighted`', () => {
