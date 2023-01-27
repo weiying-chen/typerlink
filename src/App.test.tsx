@@ -59,7 +59,8 @@ describe('link', () => {
 
 		await userEvent.type(input, 'Link');
 
-		const link = screen.getByRole('link');
+		const link = screen.getAllByRole('link')[0];
+
 		const mark = within(link).getByText('Link');
 		
 		expect(mark).toBeInTheDocument();
@@ -73,7 +74,7 @@ describe('link', () => {
 
 		fireEvent.keyDown(document, { key: 'Escape' });
 
-		const link = screen.getByRole('link');
+		const link = screen.getAllByRole('link')[0];
 		const mark = within(link).queryByText('Link');
 
 		expect(mark).not.toBeInTheDocument();
@@ -84,7 +85,7 @@ describe('link', () => {
 
 		await userEvent.type(input, 'Link');
 
-		const link = screen.getByRole('link');
+		const link = screen.getAllByRole('link')[0];
 		const mark = within(link).getByText('Link');
 		
 		expect(mark).toHaveClass('selected');

@@ -4,6 +4,8 @@ function Dummy () {
 	return (
 		<div id="dummy">
 			<a href="#">Link text</a>
+			<a href="#">Link text two</a>
+			<a href="#">Link text three</a>
 		</div>
 	);
 };
