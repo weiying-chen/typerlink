@@ -43,7 +43,7 @@ describe('`input`', () => {
 });
 
 describe('link', () => {
-	beforeEach(async () => {
+	beforeEach(() => {
 		const { container } = render(
 			<>
 				<Dummy />
@@ -52,13 +52,13 @@ describe('link', () => {
 		);
 
 		fireEvent.keyDown(document, { key: '/' });
+	});
 
+	test('has been highlighted`', async () => {
 		const input = screen.getByRole('textbox');
 
 		await userEvent.type(input, 'Link');
-	});
 
-	test('has been highlighted`', () => {
 		const link = screen.getByRole('link');
 		const mark = within(link).getByText('Link');
 		
@@ -66,7 +66,11 @@ describe('link', () => {
 		expect(mark.tagName).toBe('MARK');
 	});
 
-	test('has had highlight removed', () => {
+	test('has had highlight removed', async () => {
+		const input = screen.getByRole('textbox');
+
+		await userEvent.type(input, 'Link');
+
 		fireEvent.keyDown(document, { key: 'Escape' });
 
 		const link = screen.getByRole('link');
@@ -75,7 +79,11 @@ describe('link', () => {
 		expect(mark).not.toBeInTheDocument();
 	});
 
-	test('has been selected`', () => {
+	test('has been selected`', async () => {
+		const input = screen.getByRole('textbox');
+
+		await userEvent.type(input, 'Link');
+
 		const link = screen.getByRole('link');
 		const mark = within(link).getByText('Link');
 		
