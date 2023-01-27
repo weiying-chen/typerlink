@@ -61,4 +61,14 @@ describe('link', () => {
 
 		expect(mark).not.toBeInTheDocument();
 	});
+
+	test('has been selected`', () => {
+		const link = screen.getByRole('link');
+		const mark = within(link).getByText('Link');
+		
+		expect(mark).toHaveClass('selected');
+	});
+
+	// 2. Pressing ] should select next link 
+	// 3. Pressing [] should select previous link 
 });
