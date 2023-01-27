@@ -10,22 +10,35 @@ import Dummy from './__mocks__/Dummy';
 Element.prototype.scrollIntoView = jest.fn();
 
 describe('`input`', () => {
-	test('is not visible on page load', () => {
+	beforeEach(() => {
 		render(<App />);
+	});
 
+	test('is not visible on page load', () => {
 		const input = screen.getByRole('textbox', { hidden: true });
 
 		expect(input).not.toBeVisible();
 	});
 
 	test('is visible after pressing `/`', async () => {
-		const { container } = render(<App />);
-
 		fireEvent.keyDown(document, { key: '/' });
 
 		const input = screen.getByRole('textbox');
 
 		expect(input).toBeVisible();
+	});
+
+	test('is not visible after pressing `Esc`', async () => {
+		fireEvent.keyDown(document, { key: '/' });
+
+		const input = screen.getByRole('textbox');
+
+		expect(input).toBeVisible();
+
+		fireEvent.keyDown(document, { key: 'Escape' });
+
+		expect(input).not.toBeVisible();
+		
 	});
 });
 
@@ -69,6 +82,12 @@ describe('link', () => {
 		expect(mark).toHaveClass('selected');
 	});
 
-	// 2. Pressing ] should select next link 
-	// 3. Pressing [] should select previous link 
+	// test('is the next one after pressing `]`', () => {
+	// });
+
+	// test('is the previous one after pressing `[`', () => {
+	// });
+
+	// test('has been follwed after pressing `Enter`', () => {
+	// });
 });
