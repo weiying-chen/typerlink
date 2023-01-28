@@ -91,12 +91,33 @@ describe('link', () => {
 		expect(mark).toHaveClass('selected');
 	});
 
-	// test('is the next one after pressing `]`', () => {
-	// });
+	test('is the next one after pressing `]`', async () => {
+		const input = screen.getByRole('textbox');
 
-	// test('is the previous one after pressing `[`', () => {
-	// });
+		await userEvent.type(input, 'Link');
+
+		fireEvent.keyDown(document, { key: ']', ctrlKey: true });
+
+		const link = screen.getAllByRole('link')[1];
+		const mark = within(link).getByText('Link');
+		
+		expect(mark).toHaveClass('selected');
+	});
+
+	test('is the next one after pressing `[`', async () => {
+		const input = screen.getByRole('textbox');
+
+		await userEvent.type(input, 'Link');
+
+		fireEvent.keyDown(document, { key: '[', ctrlKey: true });
+
+		const link = screen.getAllByRole('link')[2];
+		const mark = within(link).getByText('Link');
+		
+		expect(mark).toHaveClass('selected');
+	});
 
 	// test('has been follwed after pressing `Enter`', () => {
+		// Create Dummy.html and put it in link. 
 	// });
 });
