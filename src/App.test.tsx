@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { render, screen, fireEvent, within, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import React from 'react';
@@ -34,21 +35,18 @@ describe('`input`', () => {
 		const input = screen.getByRole('textbox');
 
 		expect(input).toBeVisible();
-
 		fireEvent.keyDown(document, { key: 'Escape' });
-
 		expect(input).not.toBeVisible();
-		
 	});
 });
 
 describe('link', () => {
 	beforeEach(() => {
 		const { container } = render(
-			<>
+			<MemoryRouter initialEntries={['/']}>
 				<Dummy />
 				<App />
-			</>
+			</MemoryRouter>
 		);
 
 		fireEvent.keyDown(document, { key: '/' });
@@ -62,7 +60,7 @@ describe('link', () => {
 		const link = screen.getAllByRole('link')[0];
 
 		const mark = within(link).getByText('Link');
-		
+
 		expect(mark).toBeInTheDocument();
 		expect(mark.tagName).toBe('MARK');
 	});
@@ -87,7 +85,7 @@ describe('link', () => {
 
 		const link = screen.getAllByRole('link')[0];
 		const mark = within(link).getByText('Link');
-		
+
 		expect(mark).toHaveClass('selected');
 	});
 
@@ -100,7 +98,7 @@ describe('link', () => {
 
 		const link = screen.getAllByRole('link')[1];
 		const mark = within(link).getByText('Link');
-		
+
 		expect(mark).toHaveClass('selected');
 	});
 
@@ -113,11 +111,20 @@ describe('link', () => {
 
 		const link = screen.getAllByRole('link')[2];
 		const mark = within(link).getByText('Link');
-		
+
 		expect(mark).toHaveClass('selected');
 	});
 
-	// test('has been follwed after pressing `Enter`', () => {
-		// Create Dummy.html and put it in link. 
-	// });
+	test('is clicked after pressing `Enter`', async () => {
+		const input = screen.getByRole('textbox');
+	
+		await userEvent.type(input, 'Link');
+	
+		const link = screen.getAllByRole('link')[0];
+		const handleMockLinkClick = jest.fn();
+
+		link.addEventListener('click', handleMockLinkClick);
+		fireEvent.keyDown(document, { key: 'Enter' });
+		expect(handleMockLinkClick).toHaveBeenCalled();
+	});
 });

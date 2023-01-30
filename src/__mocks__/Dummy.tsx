@@ -3,9 +3,10 @@ import React from 'react';
 function Dummy () {
 	return (
 		<div id="dummy">
-			<a href="#">Link text</a>
-			<a href="#">Link text two</a>
-			<a href="#">Link text three</a>
+			{/* Tests will fail without `href` */}
+			<a href="">Link text</a>
+			<a href="">Link text two</a>
+			<a href="">Link text three</a>
 		</div>
 	);
 };
