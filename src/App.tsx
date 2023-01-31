@@ -7,6 +7,8 @@ import {
 	addHighlight,
 	removeHighlight,
 	addSelectedClass,
+	isCommand,
+	isInInput,
 } from './utils';
 // import './style.css';
 
@@ -70,26 +72,6 @@ function App() {
 
 		// This will also set `selectedElementRef.current to `null`.
 		setSelectedElement(null);
-	}
-
-	function isInInput(event: KeyboardEvent) {
-		const target = event.target as HTMLElement;
-
-		return (
-			target.nodeName === 'INPUT' ||
-			target.nodeName === 'TEXTAREA' ||
-			target.isContentEditable
-		);
-	}
-
-	function isCommand(event: KeyboardEvent) {
-		// TODO: maybe check for non-alphanumeric
-		return (
-			event.ctrlKey ||
-			event.key === 'Enter' ||
-			event.key === 'Escape' ||
-			event.key === '/'
-		);
 	}
 
 	function handleDocumentKeyDown(event: any) {

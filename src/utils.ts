@@ -1,3 +1,23 @@
+export function isCommand(event: KeyboardEvent) {
+	// TODO: maybe check for non-alphanumeric
+	return (
+		event.ctrlKey ||
+		event.key === 'Enter' ||
+		event.key === 'Escape' ||
+		event.key === '/'
+	);
+}
+
+export function isInInput(event: KeyboardEvent) {
+	const target = event.target as HTMLElement;
+
+	return (
+		target.nodeName === 'INPUT' ||
+		target.nodeName === 'TEXTAREA' ||
+		target.isContentEditable
+	);
+}
+
 export function getPrevious(items: any[], currentItem: any) {
 	const currentItemIndex = items.indexOf(currentItem);
 	const lastElement = items[items.length - 1];
