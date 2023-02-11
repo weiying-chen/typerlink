@@ -89,6 +89,21 @@ export function removeHighlight(elements: any[]) {
 	});
 }
 
+// TODO: rename function
+export function selectElement (foundSelectedElement: HTMLElement) {
+	addSelectedClass(foundSelectedElement);
+	foundSelectedElement.scrollIntoView({
+		block: 'center',
+		behavior: 'auto',
+	});
+} 
+
 export function addSelectedClass(element: HTMLElement) {
 	element.querySelector('mark')?.classList.add('selected');
 }
+
+export function removeSelectedClass (selectedElementRefCurrent: HTMLElement) {
+	selectedElementRefCurrent
+		.querySelector('mark')
+		?.classList.remove('selected');
+} 

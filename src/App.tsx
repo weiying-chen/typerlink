@@ -6,9 +6,10 @@ import {
 	filterElementsByText,
 	addHighlight,
 	removeHighlight,
-	addSelectedClass,
 	isCommand,
 	isInInput,
+	selectElement,
+	removeSelectedClass,
 } from './utils';
 // import './style.css';
 
@@ -49,11 +50,7 @@ function App() {
 
 		// No need to remove `selected` from the previous element because `removeHighlights` is removing `<marks>`.
 		if (foundSelectedElement) {
-			addSelectedClass(foundSelectedElement);
-			foundSelectedElement.scrollIntoView({
-				block: 'center',
-				behavior: 'auto',
-			});
+			selectElement(foundSelectedElement)
 		}
 
 		setInputValue(value);
@@ -85,16 +82,10 @@ function App() {
 				selectedElementRef.current
 			);
 
-			selectedElementRef.current
-				?.querySelector('mark')
-				?.classList.remove('selected');
+			if (selectedElementRef.current) removeSelectedClass(selectedElementRef.current)
 
 			if (foundSelectedElement) {
-				addSelectedClass(foundSelectedElement);
-				foundSelectedElement.scrollIntoView({
-					block: 'center',
-					behavior: 'auto',
-				});
+				selectElement(foundSelectedElement)
 			}
 
 			setSelectedElement(foundSelectedElement);
@@ -106,16 +97,10 @@ function App() {
 				selectedElementRef.current
 			);
 
-			selectedElementRef.current
-				?.querySelector('mark')
-				?.classList.remove('selected');
+			if (selectedElementRef.current) removeSelectedClass(selectedElementRef.current)
 
 			if (foundSelectedElement) {
-				addSelectedClass(foundSelectedElement);
-				foundSelectedElement.scrollIntoView({
-					block: 'center',
-					behavior: 'auto',
-				});
+				selectElement(foundSelectedElement)
 			}
 
 			setSelectedElement(foundSelectedElement);

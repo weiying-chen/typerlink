@@ -21,7 +21,7 @@ describe('`input`', () => {
 		expect(input).not.toBeVisible();
 	});
 
-	test('is visible after pressing `/`', async () => {
+	test('is visible after pressing /', async () => {
 		fireEvent.keyDown(document, { key: '/' });
 
 		const input = screen.getByRole('textbox');
@@ -29,7 +29,7 @@ describe('`input`', () => {
 		expect(input).toBeVisible();
 	});
 
-	test('is not visible after pressing `Esc`', async () => {
+	test('is not visible after pressing Esc', async () => {
 		fireEvent.keyDown(document, { key: '/' });
 
 		const input = screen.getByRole('textbox');
@@ -78,7 +78,7 @@ describe('link', () => {
 		expect(mark).not.toBeInTheDocument();
 	});
 
-	test('has been selected`', async () => {
+	test('#1 has been selected`', async () => {
 		const input = screen.getByRole('textbox');
 
 		await userEvent.type(input, 'Link');
@@ -89,7 +89,21 @@ describe('link', () => {
 		expect(mark).toHaveClass('selected');
 	});
 
-	test('is the next one after pressing `]`', async () => {
+	test('#1 has been deselected next after pressing ]', async () => {
+		const input = screen.getByRole('textbox');
+
+		await userEvent.type(input, 'Link');
+
+		fireEvent.keyDown(document, { key: ']', ctrlKey: true });
+
+		const link = screen.getAllByRole('link')[0];
+		const mark = within(link).getByText('Link');
+
+		expect(mark).not.toHaveClass('selected');
+	});
+
+	// TODO: test is not longer selected when pressing ] or [
+	test('#2 has been selected after pressing ]', async () => {
 		const input = screen.getByRole('textbox');
 
 		await userEvent.type(input, 'Link');
@@ -102,7 +116,7 @@ describe('link', () => {
 		expect(mark).toHaveClass('selected');
 	});
 
-	test('is the next one after pressing `[`', async () => {
+	test('is the next one after pressing [', async () => {
 		const input = screen.getByRole('textbox');
 
 		await userEvent.type(input, 'Link');
@@ -115,7 +129,7 @@ describe('link', () => {
 		expect(mark).toHaveClass('selected');
 	});
 
-	test('is clicked after pressing `Enter`', async () => {
+	test('is clicked after pressing Enter', async () => {
 		const input = screen.getByRole('textbox');
 	
 		await userEvent.type(input, 'Link');
