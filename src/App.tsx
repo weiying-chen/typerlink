@@ -19,34 +19,39 @@ type ContentEditableElement = HTMLElement & {
 };
 
 function App() {
-	const [inputValue, setInputValue] = useState('');
 	const [elements, setElements] = useState<HTMLElement[]>([]);
+
 	const [selectedElement, setSelectedElement] = useState<HTMLElement | null>(
 		null
 	);
+
+	const [inputValue, setInputValue] = useState('');
+
 	// TODO: Maybe merge this with `inputValue`?
 	const [isInputFocused, setIsInputFocused] = useState(false);
+	const elementsRef = useRef(elements);
 
 	// This is needed because `selectedElement` only the initial state inside `handleDocumentKeyDown`.
-	const elementsRef = useRef(elements);
 	const selectedElementRef = useRef(selectedElement);
 	const inputRef = useRef<HTMLInputElement | null>(null);
 
-	selectedElementRef.current = selectedElement;
 	elementsRef.current = elements;
+	selectedElementRef.current = selectedElement;
 
+	// The default `input` behavior already ignores Ctrl commands.
 	function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-		// The default `input` behavior already ignores Ctrl commands.
+		// These functions can't be pure, because they have to access the original HTML elements
+		if (elements.length) removeHighlight(elements);
+
 		const selectors = 'a, button';
 		const { value } = event.target as HTMLInputElement;
 
 		// TODO: Rename "found" to something else?
 		const foundElements = filterElementsByText(selectors, value);
-		const foundSelectedElement = foundElements[0] || null;
 
-		// These functions can't be pure, because they have to access the original HTML elements
-		if (elements.length) removeHighlight(elements);
 		if (foundElements.length) addHighlight(foundElements, value);
+
+		const foundSelectedElement = foundElements[0] || null;
 
 		// No need to remove `selected` from the previous element because `removeHighlights` is removing `<marks>`.
 		if (foundSelectedElement) {
@@ -77,12 +82,12 @@ function App() {
 		// TODO: Make this DRY.
 		// And maybe there should only be a function inside each key event
 		if (event.ctrlKey && event.key === ']') {
+			if (selectedElementRef.current) removeSelectedClass(selectedElementRef.current)
+
 			const foundSelectedElement = getNext(
 				elementsRef.current,
 				selectedElementRef.current
 			);
-
-			if (selectedElementRef.current) removeSelectedClass(selectedElementRef.current)
 
 			if (foundSelectedElement) {
 				selectElement(foundSelectedElement)
@@ -92,12 +97,12 @@ function App() {
 		}
 
 		if (event.ctrlKey && event.key === '[') {
+			if (selectedElementRef.current) removeSelectedClass(selectedElementRef.current)
+
 			const foundSelectedElement = getPrevious(
 				elementsRef.current,
 				selectedElementRef.current
 			);
-
-			if (selectedElementRef.current) removeSelectedClass(selectedElementRef.current)
 
 			if (foundSelectedElement) {
 				selectElement(foundSelectedElement)
@@ -160,6 +165,7 @@ function App() {
 				onBlur={handleInputBlur}
 				value={inputValue}
 			/>
+
 			<span id="count">
 				{/* TODO: Turn this into a variable */}
 				{selectedElement ? elements.indexOf(selectedElement) + 1 : 0}/
