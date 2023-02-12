@@ -43,10 +43,10 @@ describe('`input`', () => {
 describe('link', () => {
 	beforeEach(() => {
 		const { container } = render(
-			<MemoryRouter initialEntries={['/']}>
+			<>
 				<Dummy />
 				<App />
-			</MemoryRouter>
+			</>
 		);
 
 		fireEvent.keyDown(document, { key: '/' });
