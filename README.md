@@ -2,7 +2,7 @@
 
 Browse the web by typing link text.
 
-![](https://github.com/weiying-chen/command-launcher/blob/main/demo.gif)
+![](https://github.com/weiying-chen/typerlink/blob/main/demo.gif)
 
 ## Installation
 
