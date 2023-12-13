@@ -4,15 +4,22 @@ Browse the web by typing link text.
 
 ![](https://github.com/weiying-chen/command-launcher/blob/main/demo.gif)
 
-## Quick start
+## Installation
 
-```shell
-cargo run
+```bash
+# Install dependencies
+npm install
 ```
 
-or
+# Usage
 
-```shell
-cargo build --release
-./target/release/command-launcher
+```bash
+# Build the Chrome extension
+npm run build
+
+# Build the Chrome extension each time the code changes
+npm run dev
+
+# Test the Chrome extension
+npm run test
 ```
