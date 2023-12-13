@@ -1,6 +1,6 @@
 {
 	"name": "typerlink",
-	"description": "Browse the web with your keyboard.",
+	"description": "Browse the web by typing link text.",
 	"version": "1.0",
 	"manifest_version": 3,
 	"action": {
