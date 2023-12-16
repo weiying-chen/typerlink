@@ -14,12 +14,12 @@ npm install
 # Usage
 
 ```bash
-# Build the Chrome extension
+# Build the app
 npm run build
 
-# Build the Chrome extension each time the code changes
+# Build the app each time the code changes
 npm run dev
 
-# Test the Chrome extension
+# Test the app
 npm run test
 ```
