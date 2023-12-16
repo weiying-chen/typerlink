@@ -11,7 +11,7 @@ Browse the web by typing link text.
 npm install
 ```
 
-# Usage
+## Usage
 
 ```bash
 # Build app each time the code changes
