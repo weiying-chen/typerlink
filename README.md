@@ -14,12 +14,12 @@ npm install
 # Usage
 
 ```bash
-# Build the app
+# Build app
 npm run build
 
-# Build the app each time the code changes
+# Build app each time the code changes
 npm run dev
 
-# Test the app
+# Test app
 npm run test
 ```
